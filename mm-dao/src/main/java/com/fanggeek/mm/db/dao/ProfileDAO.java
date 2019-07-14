@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.jongo.Find;
 import org.jongo.MongoCursor;
+import org.springframework.stereotype.Repository;
 
 import com.fanggeek.mm.common.constants.Constants;
 import com.fanggeek.mm.dao.model.doc.SystemProfileDocument;
 import com.fanggeek.mm.db.MongoDAOSupport;
 import com.mongodb.BasicDBObject;
 
+@Repository
 public class ProfileDAO extends MongoDAOSupport<BasicDBObject> {
 
     @Override
@@ -23,18 +25,32 @@ public class ProfileDAO extends MongoDAOSupport<BasicDBObject> {
     }
     
 //    @Override
-//    protected List<T> getList(String query, String sort, int limit) {
-//        
-//        Find find = getCollection().find(query).sort(sort).skip(0).limit(limit);
-//        
-//        
-//        MongoCursor<T> xxx= (MongoCursor<T>) find.as(BasicDBObject.class);
-//        
-//        
-//        List<T> list = toList(xxx);
-//        
-//        
-//        return list;
-//    }
+    public List<BasicDBObject> getList(int limit) {
+        
+        Find find = getCollection().find().limit(limit);
+        
+        
+        MongoCursor<BasicDBObject> xxx= (MongoCursor<BasicDBObject>) find.as(BasicDBObject.class);
+        
+        
+        List<BasicDBObject> list = toList(xxx);
+        
+        
+        return list;
+    }
+    
+    @Override
+    public List<BasicDBObject> getList(String query, String sort, int limit) {
+        
+        Find find = getCollection().find(query).sort(sort).skip(0).limit(limit);
+        
+        
+        MongoCursor<BasicDBObject> xxx= (MongoCursor<BasicDBObject>) find.as(BasicDBObject.class);
+        
+        
+        List<BasicDBObject> list = toList(xxx);
+        
+        return list;
+    }
 
 }
