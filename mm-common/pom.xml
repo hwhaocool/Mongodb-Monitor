@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>mongo-monitor-pom</artifactId>
+        <groupId>com.fanggeek.mm</groupId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>mm-common</artifactId>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+    
+        <!-- 文档 -->
+        <dependency>
+            <groupId>com.fanggeek</groupId>
+            <artifactId>document</artifactId>
+        </dependency>
+        
+        <!-- 我们自己的common包 -->
+        <dependency>
+            <groupId>com.fanggeek</groupId>
+            <artifactId>common-tools</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fanggeek</groupId>
+            <artifactId>common-service</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>public</id>
+            <name>public Repository</name>
+            <url>http://192.168.2.100:18081/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
+
+</project>

@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+mongodb:
+  client-uri: mongodb://fanggeek:fanggeek!%40#dev@dds-wz9d69c504cfac541.mongodb.rds.aliyuncs.com:3717,dds-wz9d69c504cfac542.mongodb.rds.aliyuncs.com:3717/fanggeek?replicaSet=mgset-4721611
+  database: fanggeek
+  connections-per-host: 50
+  
+common:
+  envName: dev
+
+apollo:
+  bootstrap:
+    enabled: true
+  meta: http://apollo-meta.backend.com
+  cacheDir: /opt
+  
+app:
+  id: dev-b-app

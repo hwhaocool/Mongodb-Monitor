@@ -1,0 +1,47 @@
+server:
+  port: 8080
+
+mongodb:
+  client-uri: mongodb://fanggeek:fanggeek!%40#prod@dds-wz9bb4b16e126c042.mongodb.rds.aliyuncs.com:3717,dds-wz9bb4b16e126c041.mongodb.rds.aliyuncs.com:3717/fanggeek?replicaSet=mgset-2456873
+  database: fanggeek
+  connections-per-host: 50
+
+# redis数据库连接配置(covert)
+redisconfig:
+  agentUrl: "redis://:YxtIeeNH5ccFgAOAyDnf9UQMAQLiAa@r-wz993be4ef7e2374.redis.rds.aliyuncs.com:6379/115"
+  userUrl: "redis://:YxtIeeNH5ccFgAOAyDnf9UQMAQLiAa@r-wz993be4ef7e2374.redis.rds.aliyuncs.com:6379/117"
+  # 最大实例数
+  maxTotal: 200
+  # 最大空闲实例数
+  maxIdle: 50
+  # (创建实例时)最大等待时间
+  maxWaitMillis: 10000
+  # (创建实例时)是否验证
+  testOnBorrow: true
+
+# 阿里msq 相关配置
+alimsq:
+  recvName: api-todo-queue
+  sendName: odin-todo-queue
+  topicUnitCreateName: api-unit
+  topicName: agent-api
+  env: prod
+  wechatName: skmr-opensearch
+  weworkName: odin-todo-queue
+  mpwechatName: web-service-queue
+  websocketName: ws-service-todo-queue
+
+# 消息模版相关配置
+tmplatemsg:
+  type: SEND_WECHAT_TEMPLATE_MESSAGE
+  id: 9zOG--UaKPTqA63mjmI-rAAAOSr1qW9Oqs7SMhiTHO8
+  forumId: BtEbD1vPd73ZTM---nb-iqN-9QhRp5wxYgLQh6KfE-k
+  memberId: yEeOs1W6fWkGNbcd4qxZygRFir_3xszzza6zJhOZPQc
+  unitId: ui-9xopDGGdFzI1yENtRjHcy7ox04K512Ih4FkayXaw
+  visitId: rUTo-tEM-koyBNEVDjUc4WgsJ51n7NtSdLfQF7C5roc
+
+  id2: ARei7VpyL3AEoqjManpKRbfmNYlruu3H9WnqENNCmwA
+  buildingComment: CSHufKeP5Oc5cRmPON5-NcoZvkv5cyjyG1K86UwZNwk
+
+common:
+  envName: prod
