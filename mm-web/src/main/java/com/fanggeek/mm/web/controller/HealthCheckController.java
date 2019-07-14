@@ -1,4 +1,4 @@
-package com.fanggeek.msg.web.controller;
+package com.fanggeek.mm.web.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,8 +24,8 @@ import com.fanggeek.mm.model.vo.HealthInfo;
 @RestController
 public class HealthCheckController {
     
-    @ApolloConfig
-    private Config config;
+//    @ApolloConfig
+//    private Config config;
     
     //健康检查接口
     @RequestMapping(value = "/health", method = RequestMethod.GET)
@@ -39,8 +39,26 @@ public class HealthCheckController {
 
         info.setTime(sdf.format(new Date()));
         
-        info.setTip(config.getProperty("test", "default"));
+        info.setTip("anything is fine");
+        
+//        info.setTip(config.getProperty("test", "default"));
 
+        return info;
+    }
+    
+    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    public HealthInfo error( HttpServletRequest request) {
+        
+        HealthInfo info = new HealthInfo();
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+        TimeZone e8 = TimeZone.getTimeZone("GMT+8");
+        TimeZone.setDefault(e8);
+        
+        info.setTime(sdf.format(new Date()));
+        
+        info.setTip("something maybe wrong");
+        
         return info;
     }
 }
