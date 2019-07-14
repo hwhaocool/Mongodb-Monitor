@@ -28,7 +28,7 @@ public class HealthCheckController {
     private Config config;
     
     //健康检查接口
-    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    @RequestMapping(value = "/health", method = RequestMethod.GET)
     public HealthInfo info( HttpServletRequest request) {
         
         HealthInfo info = new HealthInfo();
