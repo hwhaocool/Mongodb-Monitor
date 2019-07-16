@@ -49,6 +49,12 @@
             <artifactId>mm-service</artifactId>
             <version>1.0</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.fanggeek.mm</groupId>
+            <artifactId>mm-task</artifactId>
+            <version>1.0</version>
+        </dependency>
 
     </dependencies>
 
