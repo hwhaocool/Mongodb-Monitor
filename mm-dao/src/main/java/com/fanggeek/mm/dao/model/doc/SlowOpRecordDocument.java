@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SlowOpRecordDocument {
     
-    private String _id;                     //
+    private String _id;                     //_d
+    
+    private String sha1;                    // 对一些字段进行hash，来避免重复
     
     @JsonProperty("ts")
     private Date createTime;                //发生时间
@@ -57,6 +59,14 @@ public class SlowOpRecordDocument {
 
     public void set_id(String _id) {
         this._id = _id;
+    }
+
+    public String getSha1() {
+        return sha1;
+    }
+
+    public void setSha1(String sha1) {
+        this.sha1 = sha1;
     }
 
     /**
