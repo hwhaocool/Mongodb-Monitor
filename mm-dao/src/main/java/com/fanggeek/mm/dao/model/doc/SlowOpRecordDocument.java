@@ -2,11 +2,13 @@ package com.fanggeek.mm.dao.model.doc;
 
 import java.util.Date;
 
+import org.bson.types.ObjectId;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SlowOpRecordDocument {
     
-    private String _id;                     //_d
+    private ObjectId _id;                     //_d
     
     private String sha1;                    // 对一些字段进行hash，来避免重复
     
@@ -54,10 +56,10 @@ public class SlowOpRecordDocument {
      * @since 2019-07-15
      */
     public String get_id() {
-        return _id;
+        return _id.toHexString();
     }
 
-    public void set_id(String _id) {
+    public void set_id(ObjectId _id) {
         this._id = _id;
     }
 
