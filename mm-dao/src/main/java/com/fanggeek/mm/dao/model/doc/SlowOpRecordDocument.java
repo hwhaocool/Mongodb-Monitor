@@ -2,10 +2,14 @@ package com.fanggeek.mm.dao.model.doc;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class SlowOpRecordDocument {
     
     private String _id;                     //
-    private Date ts;                        //发生时间
+    
+    @JsonProperty("ts")
+    private Date createTime;                //发生时间
 
     private String op;                      //操作类型，query
     private String db;                      //库名，fanggeek
@@ -13,6 +17,8 @@ public class SlowOpRecordDocument {
     
     private Object query;                   //查询语句,op=query
     private Object command;                 //查询语句, op=command
+    
+    private Object originatingCommand;      //查询语句, op=getmore
     
     private Integer keysExamined;           //索引扫描数量
     private Integer docsExamined;           //文档扫描数量
@@ -127,6 +133,14 @@ public class SlowOpRecordDocument {
         this.command = command;
     }
     
+    public Object getOriginatingCommand() {
+        return originatingCommand;
+    }
+
+    public void setOriginatingCommand(Object originatingCommand) {
+        this.originatingCommand = originatingCommand;
+    }
+
     /**
      * <br>索引扫描数量
      *
@@ -295,12 +309,12 @@ public class SlowOpRecordDocument {
      * @author YellowTail
      * @since 2019-07-15
      */
-    public Date getTs() {
-        return ts;
+    public Date getCreateTime() {
+        return createTime;
     }
     
-    public void setTs(Date ts) {
-        this.ts = ts;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
     
     /**
@@ -335,13 +349,14 @@ public class SlowOpRecordDocument {
 
     @Override
     public String toString() {
-        return "SlowOpRecordDocument [_id=" + _id + ", ts=" + ts + ", op=" + op + ", db=" + db + ", ns=" + ns
-                + ", query=" + query + ", command=" + command + ", keysExamined=" + keysExamined + ", docsExamined="
-                + docsExamined + ", cursorExhausted=" + cursorExhausted + ", numYield=" + numYield + ", locks=" + locks
-                + ", nreturned=" + nreturned + ", responseLength=" + responseLength + ", protocol=" + protocol
-                + ", millis=" + millis + ", planSummary=" + planSummary + ", execStats=" + execStats + ", client="
-                + client + ", user=" + user + "]";
+        return "SlowOpRecordDocument [_id=" + _id + ", createTime=" + createTime + ", op=" + op + ", db=" + db + ", ns="
+                + ns + ", query=" + query + ", command=" + command + ", originatingCommand=" + originatingCommand
+                + ", keysExamined=" + keysExamined + ", docsExamined=" + docsExamined + ", cursorExhausted="
+                + cursorExhausted + ", numYield=" + numYield + ", locks=" + locks + ", nreturned=" + nreturned
+                + ", responseLength=" + responseLength + ", protocol=" + protocol + ", millis=" + millis
+                + ", planSummary=" + planSummary + ", execStats=" + execStats + ", client=" + client + ", user=" + user
+                + "]";
     }
-    
+
     
 }
