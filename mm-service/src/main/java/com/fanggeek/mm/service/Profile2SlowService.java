@@ -2,6 +2,7 @@ package com.fanggeek.mm.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -46,8 +47,10 @@ public class Profile2SlowService {
         
         List<SlowOpRecordDocument> collect = list.stream()
                 .map( x -> genDoc(x))
+                //耗时 增加条件，不一定所有的都记录
+                .filter(x -> isCostTimeMatchCondition(x))
                 //因为是固定集合，所以当慢查询不多的时候，很容易就重复了，需要排除一下
-                .filter( x -> slowOpRecordDAO.isSha1Exist(x.getSha1()) )
+                .filter( x -> saveBySha1Consition(x) )
                 .collect(Collectors.toList());
         
         slowOpRecordDAO.saves(collect);
@@ -55,6 +58,67 @@ public class Profile2SlowService {
         LOGGER.info("recordAndSave2Other end, save {} doc", collect.size());
     }
     
+    /**
+     * <br>慢查询耗时是否匹配我们设置的阈值
+     * <br>阈值配置在环境变量里， 
+     *
+     * @param document
+     * @return
+     * @author YellowTail
+     * @since 2019-07-16
+     */
+    private boolean isCostTimeMatchCondition(SlowOpRecordDocument document) {
+        Map<String, String> getenv = System.getenv();
+        
+        String minCost = getenv.getOrDefault("min-cost", "1000");
+        
+        int limit = 1000;
+        try {
+            limit = Integer.parseInt(minCost);
+        } catch (NumberFormatException e) {
+            LOGGER.info("env min-cost {} is invalid number format ", minCost);
+        }
+        
+        LOGGER.info("current min cost limit is {}", limit);
+        
+        Integer millis = document.getMillis();
+        if (null == millis) {
+            return false;
+        }
+        
+        if (millis.intValue() >= limit) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * <br>sha1 不重复的时候，可以保存
+     *
+     * @param document
+     * @return
+     * @author YellowTail
+     * @since 2019-07-16
+     */
+    private boolean saveBySha1Consition(SlowOpRecordDocument document) {
+        boolean sha1Exist = slowOpRecordDAO.isSha1Exist(document.getSha1());
+        
+        if (sha1Exist) {
+            LOGGER.info("sha1 {} duplicate,", document.getSha1());
+        }
+        
+        return ! sha1Exist;
+    }
+    
+    /**
+     * <br>profile 转成 doc
+     *
+     * @param basicDBObject
+     * @return
+     * @author YellowTail
+     * @since 2019-07-16
+     */
     private SlowOpRecordDocument genDoc(BasicDBObject basicDBObject) {
         
         String json = JSON2Helper.toJson(basicDBObject);
@@ -81,6 +145,13 @@ public class Profile2SlowService {
         return document;
     }
     
+    /**
+     * <br>生成并设置 sha1
+     *
+     * @param document
+     * @author YellowTail
+     * @since 2019-07-16
+     */
     private void genAndSetHashCode(SlowOpRecordDocument document) {
         //在哪个时间{ts} 谁{user} 对谁{ns} 进行了什么操作{op}
         
