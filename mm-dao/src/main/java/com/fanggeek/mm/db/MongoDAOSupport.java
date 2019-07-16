@@ -52,8 +52,24 @@ public abstract class MongoDAOSupport<T extends Object> {
         this.createIndexs();
     }
     
-    protected void createIndex(String field, IndexType IndexType) {
-        this.createIndex(Index.of(field, IndexType));
+    protected void createIndex(String field, IndexType indexType) {
+        if (IndexType.UNIQUE.equals(indexType)) {
+            createUniqueIndex(Index.of(field, IndexType.ASCENDING));
+        } else {
+            this.createIndex(Index.of(field, indexType));
+        }
+    }
+    
+    protected void createIndex(Index index) {
+        BasicDBObject ops = new BasicDBObject("background", true);
+        getCollection().getDBCollection().createIndex(index.getIndexs(), ops);
+    }
+    
+    private void createUniqueIndex(Index index) {
+        BasicDBObject ops = new BasicDBObject("unique", true);
+        ops.put("background", true);
+        
+        getCollection().getDBCollection().createIndex(index.getIndexs(), ops);
     }
 
     protected MongoCollection getCollection() {
@@ -62,6 +78,14 @@ public abstract class MongoDAOSupport<T extends Object> {
 
     protected MongoCollection getCollection(String collectionName) {
         return jongo.getCollection(collectionName);
+    }
+    
+    public void save(T t) {
+        getCollection().save(t);
+    }
+    
+    public void saves(Collection<T> ts) {
+        getCollection().insert(ts.toArray());
     }
 
     public T getById(Object id) {
@@ -464,11 +488,6 @@ public abstract class MongoDAOSupport<T extends Object> {
     }
     
     
-    protected void createIndex(Index index) {
-        BasicDBObject ops = new BasicDBObject("background", true);
-        getCollection().getDBCollection().createIndex(index.getIndexs(), ops);
-    }
-    
     public static enum IndexType {
         ASCENDING(1),
         DESCENDING(-1),
@@ -477,6 +496,7 @@ public abstract class MongoDAOSupport<T extends Object> {
         GEOSPHERE("2dsphere"),
         HASHED("hashed"),
         TEXT("text"),
+        UNIQUE("unique"),
         ;
         private Object val ;
         
