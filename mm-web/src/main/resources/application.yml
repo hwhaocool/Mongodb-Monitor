@@ -12,13 +12,13 @@ common:
     
 # monitor 表示要监控的数据库， 这里的配置需要自行修改
 monitor-major-mongodb:
-  client-uri: mongodb://name:passwd@db-major-primary:3717,db-major-secondary:3717?db
-  database: db
+  client-uri: mongodb://name:passwd@db-major-primary:3717,db-major-secondary:3717
+  database:  ${major-db:db1}
   connections-per-host: 50
 
 
 # save 表示数据要保存到的数据库
 save-mongodb:
   client-uri: mongodb://name:passwd@db-save-primary:3717,db-save-secondary:3717
-  database: db
+  database: ${save-db:db2}
   connections-per-host: 50
