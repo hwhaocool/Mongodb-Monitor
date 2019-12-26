@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.fanggeek.mm.common.constants.Constants;
-import com.fanggeek.mm.dao.model.doc.SystemProfileDocument;
 import com.fanggeek.mm.db.MongoDAOSupport;
 import com.mongodb.BasicDBObject;
 
@@ -34,13 +33,10 @@ public class ProfileDAO extends MongoDAOSupport<BasicDBObject> {
         
     }
     
-//    @Override
     public List<BasicDBObject> getList(int limit) {
         Find find = getCollection().find().limit(limit);
         
         MongoCursor<BasicDBObject> xxx= (MongoCursor<BasicDBObject>) find.as(BasicDBObject.class);
-        
-        System.out.println("hahahah");
         
         List<BasicDBObject> list = toList(xxx);
         
