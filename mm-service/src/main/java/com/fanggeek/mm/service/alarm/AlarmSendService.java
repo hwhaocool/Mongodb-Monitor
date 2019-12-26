@@ -17,7 +17,7 @@ public class AlarmSendService {
     /**
      * 机器人id
      */
-    @Value("${common.envName}")
+    @Value("${common.robotKey}")
     private String robotKey;
     
     /**
