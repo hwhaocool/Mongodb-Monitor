@@ -24,17 +24,11 @@
     
     <logger name="org.springframework" level="WARN" />
     <logger name="org.springframework.data.mongodb" level="debug" />
-    <logger name="org.jboss.resteasy.plugins" level="WARN" />
-    <logger name="org.hibernate.validator" level="WARN" />
-    <logger name="org.jose4j" level="WARN" />
-    <logger name="net.rubyeye.xmemcached" level="ERROR" />
-    <logger name="com.google.code" level="ERROR" />
-    <logger name="org.dozer" level="WARN" />
     <logger name="org.apache.http" level="WARN" />
     <logger name="org.apache.commons.beanutils" level="WARN" />
     <logger name="org.mongodb.driver" level="INFO" />
     <logger name="org.springframework.data.mongodb.core.MongoDbUtils" level="DEBUG" />
-    <logger name="com.fanggeek" level="DEBUG" />
+
     
     <root level="debug">
         <appender-ref ref="console" />

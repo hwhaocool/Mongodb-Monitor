@@ -19,7 +19,7 @@
         <module>mm-service</module>
     </modules>
 
-    <groupId>com.fanggeek.mm</groupId>
+    <groupId>com.github.hwhaocool.mm</groupId>
     <artifactId>mongo-monitor-pom</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
