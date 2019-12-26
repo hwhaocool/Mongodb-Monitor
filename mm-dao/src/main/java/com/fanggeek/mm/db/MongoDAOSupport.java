@@ -1,9 +1,13 @@
 package com.fanggeek.mm.db;
 
-import com.fanggeek.be.MongoDocument;
-import com.fanggeek.common.utils.GenericsUtils;
-import com.fanggeek.common.utils.mongodb.QueryStringBuilder;
-import com.mongodb.BasicDBObject;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
+
+import javax.annotation.PostConstruct;
+
 import org.bson.types.ObjectId;
 import org.jongo.Aggregate.ResultsIterator;
 import org.jongo.Find;
@@ -12,17 +16,10 @@ import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import com.fanggeek.mm.common.utils.GenericsUtils;
+import com.mongodb.BasicDBObject;
 
 @Component
 public abstract class MongoDAOSupport<T extends Object> {
@@ -32,18 +29,18 @@ public abstract class MongoDAOSupport<T extends Object> {
     /**
      * 查询时间 阈值， 7秒
      */
-    public static final long QUERY_TIME_LIMIT = 7 * 1000;
-
-    @Autowired
-    private Jongo jongo;
+    public static final long QUERY_TIME_LIMIT = 30 * 1000;
 
     protected Class<T> entityClass;
 
+    @SuppressWarnings("unchecked")
     public MongoDAOSupport() {
         entityClass = GenericsUtils.getSuperClassGenricType(getClass());
     }
     
     protected abstract String collectionName();
+    
+    protected abstract Jongo getJongo();
     
     public abstract void createIndexs();
     
@@ -73,11 +70,11 @@ public abstract class MongoDAOSupport<T extends Object> {
     }
 
     protected MongoCollection getCollection() {
-        return jongo.getCollection(collectionName());
+        return getJongo().getCollection(collectionName());
     }
 
     protected MongoCollection getCollection(String collectionName) {
-        return jongo.getCollection(collectionName);
+        return getJongo().getCollection(collectionName);
     }
     
     public void save(T t) {
@@ -190,21 +187,6 @@ public abstract class MongoDAOSupport<T extends Object> {
         return toList((MongoCursor<T>) getCollection().find(query).sort(sort).skip(0).limit(limit).as(entityClass));
     }
     
-    /**
-     * 全量分页查询
-     */
-    public List<T> getListByOid(String minId, int pagesize) {
-
-        String query = QueryStringBuilder.newBuilder()
-            .addField("del_flag_inner:{$ne: 1}")
-            .addFieldWithObjectId("_id:{$lt: #}", minId)
-            .build();
-        
-        String sort = "{_id: -1}";
-        
-        return getList(query, sort, pagesize);
-    }
-    
     protected List<T> getList(String query, String projection, String sort, int limit) {
         return toList((MongoCursor<T>) getCollection()
                 .find(query).projection(projection)
@@ -214,19 +196,12 @@ public abstract class MongoDAOSupport<T extends Object> {
     }
     
     protected List<T> getList(String query, String sort, int limit) {
-        LOGGER.info("start to getList");
         
         Find find = getCollection().find(query).sort(sort).skip(0).limit(limit);
         
-        LOGGER.info("already get 1  find");
-        
         MongoCursor<T> xxx= (MongoCursor<T>) find.as(entityClass);
         
-        LOGGER.info("already get 2  xxx");
-        
         List<T> list = toList(xxx);
-        
-        LOGGER.info("already get 3  list");
         
         return list;
     }
@@ -236,189 +211,6 @@ public abstract class MongoDAOSupport<T extends Object> {
         return toList((MongoCursor<T>) getCollection().find(query).sort(sort).skip(0).limit(limit).as(targetClass));
     }
 
-//    public List<T> getByIds(Collection<String> ids) {
-//        String query = "{_id: {$in: #}}";
-//        List<ObjectId> unitIds = idsToObjectIds(ids);
-//        
-//        return toList(this.getList(query, unitIds));
-//    }
-//    
-//    /**
-//     * <br>通过 _id 列表查询列表，可以指定 projection 来提升查询速度
-//     *
-//     * @param ids
-//     * @param projection
-//     * @return
-//     * @author YellowTail
-//     * @since 2019-01-26
-//     */
-//    public List<T> getByIdsWithProjection(Collection<String> ids, String projection) {
-//        String query = "{_id:{$in:#}}";
-//        List<ObjectId> unitIds = idsToObjectIds(ids);
-//        
-//        return toList((MongoCursor<T>) getCollection().find(query, unitIds).projection(projection).as(entityClass));
-//    }
-//
-//    public static List<ObjectId> idsToObjectIds(Collection<String> ids) {
-//        List<ObjectId> objectIds = ids.stream().map(houseId->new ObjectId(houseId)).collect(Collectors.toList());
-//        return objectIds;
-//    }
-//    
-//
-//    public String save(T t) {
-//        Date now = new Date();
-//        if (t.getCreateTime() == null) {
-//            t.setCreateTime(now);
-//        }
-//        if (t.getModifyTime() == null) {
-//            t.setModifyTime(now);
-//        }
-//
-//        getCollection().save(t);
-//        return t.get_id();
-//    }
-//    
-//    public void saves(T... ts) {
-//        Date date = new Date();
-//        for (T t : ts) {
-//            if (t.getCreateTime() == null) {
-//                t.setCreateTime(date);
-//            }
-//        }
-//        getCollection().insert(new Object[] {ts});
-//    }
-//
-//    public void saves(Collection<T> ts) {
-//        Date date = new Date();
-//        for (T t : ts) {
-//            if (t.getCreateTime() == null) {
-//                t.setCreateTime(date);
-//            }
-//        }
-//
-//        getCollection().insert(ts.toArray());
-//    }
-//
-//    /**
-//     * <br>更新文档，自动更新修改时间
-//     *
-//     * @param t
-//     * @return
-//     */
-//    public String update(T t) {
-//        return update(t, true);
-//    }
-//    
-//    public String update(T t, boolean setModifyTime) {
-//        if(setModifyTime){
-//            t.setModifyTime(new Date());
-//        }
-//
-//        getCollection().update(new ObjectId(t.get_id())).with(t);
-//        return t.get_id();
-//    }
-//    
-//    /**
-//     * <br>更新document
-//     * <br>
-//     *
-//     * @param query  查询条件，自行填充好，不要带占位符 #
-//     * @param update 更新语句，比如  inc set 等
-//     * @param updateParameters 更新参数
-//     * 
-//     * @author YellowTail
-//     * @since 2018-11-27
-//     */
-//    public void update(String query, String update, Object... updateParameters) {
-//        getCollection().update(query).with(update, updateParameters);
-//    }
-//    
-//    /**
-//     * <br>通过 _id 更新一个字段的值
-//     *
-//     * @param _id
-//     * @param field 字段名
-//     * @param newValue  新的值
-//     * @author YellowTail
-//     * @since 2018-11-15
-//     */
-//    public void set(String _id, String field, Object newValue) {
-//        String query = "{_id: #}";
-//        
-//        set(query, field, newValue,  new ObjectId(_id));
-//    }
-//    
-//    /**
-//     * <br>通过一个查询条件，更新一个字段的值
-//     *
-//     * @param query 查询条件
-//     * @param field 字段名
-//     * @param newValue 新的值
-//     * @param queryParameters 查询语句需要填充的值
-//     * @author YellowTail
-//     * @since 2018-11-15
-//     */
-//    public void set(String query, String field, Object newValue, Object... queryParameters) {
-//        String update = "{$set: {#: #}}";
-//        
-//        getCollection().update(query, queryParameters).with(update, new Object[]{field, newValue});
-//    }
-//
-//    /**
-//     * <br>对某个字段进行 +1 操作
-//     *
-//     * @param _id
-//     * @param key
-//     * @author YellowTail
-//     * @since 2019-01-12
-//     */
-//    public void inc(String _id, String key) {
-//        String query = QueryStringBuilder.newBuilder()
-//            .addFieldWithObjectId("_id: #", _id)
-//            .build();
-//        
-//        String inc = QueryStringBuilder.newBuilder()
-//            .addField("$inc: {#: 1}", key)
-//            .build();
-//        
-//        getCollection().update(query).with(inc);
-//    }
-//    
-//    /**
-//     * <br>对某个字段进行 -1 操作
-//     *
-//     * @param _id
-//     * @param key
-//     * @author YellowTail
-//     * @since 2019-01-12
-//     */
-//    public void sub(String _id, String key) {
-//        String query = QueryStringBuilder.newBuilder()
-//            .addFieldWithObjectId("_id: #", _id)
-//            .build();
-//        
-//        String inc = QueryStringBuilder.newBuilder()
-//            .addField("$inc: {#: -1}", key)
-//            .build();
-//        
-//        getCollection().update(query).with(inc);
-//    }
-//
-//    /**
-//     * <br>软删除
-//     * <br>物理删除请使用 remove
-//     *
-//     * @param id
-//     * @author YellowTail
-//     * @since 2018-11-15
-//     */
-//    public void delete(String id) {
-//        getCollection().update(new ObjectId(id)).with("{ $set: {del_flag_inner: #}}", Constants.INTEGER_1);
-//    }
-//    
-//    public void delete(ObjectId id) {
-//        getCollection().update(id).with("{ $set: {del_flag_inner: #}}", Constants.INTEGER_1);
-//    }
     
     /**
      * <br>物理删除

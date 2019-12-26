@@ -3,7 +3,10 @@ package com.fanggeek.mm.db.dao;
 import java.util.List;
 
 import org.jongo.Find;
+import org.jongo.Jongo;
 import org.jongo.MongoCursor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.fanggeek.mm.common.constants.Constants;
@@ -13,8 +16,15 @@ import com.mongodb.BasicDBObject;
 
 @Repository
 public class ProfileDAO extends MongoDAOSupport<BasicDBObject> {
+    
+    @Autowired
+    @Qualifier("monitorMajorJongo")
+    private Jongo jongo;
+    
+    protected Jongo getJongo() {
+        return jongo;
+    }
 
-    @Override
     protected String collectionName() {
         return Constants.DBName.SYSTEM_PROFILE;
     }
@@ -26,15 +36,13 @@ public class ProfileDAO extends MongoDAOSupport<BasicDBObject> {
     
 //    @Override
     public List<BasicDBObject> getList(int limit) {
-        
         Find find = getCollection().find().limit(limit);
-        
         
         MongoCursor<BasicDBObject> xxx= (MongoCursor<BasicDBObject>) find.as(BasicDBObject.class);
         
+        System.out.println("hahahah");
         
         List<BasicDBObject> list = toList(xxx);
-        
         
         return list;
     }
@@ -52,5 +60,7 @@ public class ProfileDAO extends MongoDAOSupport<BasicDBObject> {
         
         return list;
     }
+
+    
 
 }

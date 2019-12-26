@@ -34,7 +34,7 @@ public class SlowOpRecordDocument {
     private Object locks;                   //锁信息
     
     private Integer nreturned;              //返回的文档数量
-    private Integer responseLength;         //返回字节长度，如果这个数字很大，考虑值返回所需字段
+    private Integer responseLength;         //返回字节长度，如果这个数字很大，考虑只返回所需字段
     
     private String protocol;                //协议
     
