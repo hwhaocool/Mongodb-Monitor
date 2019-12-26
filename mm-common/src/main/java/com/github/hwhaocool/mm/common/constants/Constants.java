@@ -16,4 +16,10 @@ public class Constants {
         public static final String SYSTEM_PROFILE = "system.profile";
         public static final String SLOW_OP_RECORD = "slow_op_record";
     }
+    
+    public class Env {
+        public static final String HOST = "details-host";                    //域名
+        public static final String COST = "min-cost";                        // 耗时 最小值
+        public static final String MAX_DOCS = "max-docs";                    // 扫描文档数 最大值
+    }
 }
