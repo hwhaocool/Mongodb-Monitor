@@ -8,9 +8,9 @@
 
 
 ### 2. 环境变量
-`min-cost` 要收集、保存的慢查询耗时阈值， 类型：数字， 单位 ms
+`min-cost` 要收集、保存的慢查询耗时阈值， 类型：数字， 单位 ms  
 `max-docs` 最大的文档扫描数， 类型：数字  
-`details-host` 域名，可以用来查看详情
+`details-host` 域名，可以用来查看详情  
 
 `major-db` 监控的 db name  
 `save-db` 要保存到哪里  
