@@ -27,7 +27,6 @@ public class SlowController {
     //健康检查接口
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     public SlowList info2() {
-        slowService.test();
         
         return new SlowList();
     }
@@ -38,7 +37,7 @@ public class SlowController {
         
         SlowList list = new SlowList();
         
-        slowService.test();
+        slowService.query();
 
         return list;
     }

@@ -1,13 +1,9 @@
 package com.fanggeek.mm.web.advice;
 
-import com.fanggeek.common.feign.vo.CommonResultVO;
-import com.fanggeek.msg.common.exception.BizException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
@@ -26,28 +22,30 @@ public class ResponseBodyAdvice {
     @InitBinder
     public void initBinder(WebDataBinder binder) {}
 
-    /**
-     * 全局异常捕捉处理
-     * @param ex
-     * @return
-     */
-    @ResponseBody
-    @ExceptionHandler(value = Exception.class)
-    public CommonResultVO errorHandler(Exception ex) {
-        LOGGER.warn("ResponseBodyAdvice errorHandler occurred Exception, ", ex);
-        CommonResultVO resultVO = new CommonResultVO();
-        resultVO.setErrorCode(10000);
-        resultVO.setErrorMsg("消息微服务-服务器错误，请稍后重试");
-        return resultVO;
-    }
-
-    @ResponseBody
-    @ExceptionHandler(value = BizException.class)
-    public CommonResultVO businessExceptionHandler(BizException ex) {
-        LOGGER.warn("ResponseBodyAdvice businessExceptionHandler occurred Exception, ", ex);
-        CommonResultVO resultVO = new CommonResultVO();
-        resultVO.setErrorCode(ex.getCode());
-        resultVO.setErrorMsg(ex.getMsg());
-        return resultVO;
-    }
+//    /**
+//     * 全局异常捕捉处理
+//     * @param ex
+//     * @return
+//     */
+//    @ResponseBody
+//    @ExceptionHandler(value = Exception.class)
+//    public CommonResultVO errorHandler(Exception ex) {
+//        LOGGER.warn("ResponseBodyAdvice errorHandler occurred Exception, ", ex);
+//        CommonResultVO resultVO = new CommonResultVO();
+//        resultVO.setErrorCode(10000);
+//        resultVO.setErrorMsg("消息微服务-服务器错误，请稍后重试");
+//        return resultVO;
+//    }
+//
+//    @ResponseBody
+//    @ExceptionHandler(value = BizException.class)
+//    public CommonResultVO businessExceptionHandler(BizException ex) {
+//        LOGGER.warn("ResponseBodyAdvice businessExceptionHandler occurred Exception, ", ex);
+//        CommonResultVO resultVO = new CommonResultVO();
+//        resultVO.setErrorCode(ex.getCode());
+//        resultVO.setErrorMsg(ex.getMsg());
+//        return resultVO;
+//    }
+    
+    
 }
