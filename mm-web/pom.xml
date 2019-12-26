@@ -35,7 +35,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
+        
         <!-- 依赖 mm-common 模块-->
         <dependency>
             <groupId>com.github.hwhaocool.mm</groupId>

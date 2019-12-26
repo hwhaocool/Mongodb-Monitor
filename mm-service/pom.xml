@@ -44,6 +44,11 @@
              <artifactId>spring-webflux</artifactId>
         </dependency>
         
+        <dependency>
+            <groupId>io.projectreactor.netty</groupId>
+            <artifactId>reactor-netty</artifactId>
+        </dependency>
+        
     </dependencies>
 
 
