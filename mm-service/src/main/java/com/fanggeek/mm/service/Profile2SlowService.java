@@ -135,6 +135,10 @@ public class Profile2SlowService {
         // 2. 数据库已存在的 sha1 列表
         List<SlowOpRecordDocument> sha1Match = slowOpRecordDAO.sha1Match(sha1List);
         
+        if (CollectionUtils.isEmpty(sha1Match)) {
+            return matchCostList;
+        }
+        
         List<String> dbExistSha1List = sha1Match.stream()
             .map(SlowOpRecordDocument::getSha1)
             .collect(Collectors.toList());

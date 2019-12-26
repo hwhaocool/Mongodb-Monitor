@@ -57,7 +57,7 @@ public class SlowOpRecordDAO extends MongoDAOSupport<SlowOpRecordDocument>{
     }
     
     public List<SlowOpRecordDocument> sha1Match(List<String> sha1List) {
-        return getListWithDocument("{sha1: {$in: #}}", sha1List, "sha1: 1");
+        return getListWithDocument("{sha1: {$in: #}}", sha1List, "{sha1: 1}");
     }
 
     

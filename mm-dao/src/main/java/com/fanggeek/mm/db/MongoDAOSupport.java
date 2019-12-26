@@ -27,7 +27,7 @@ public abstract class MongoDAOSupport<T extends Object> {
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoDAOSupport.class);
     
     /**
-     * 查询时间 阈值， 7秒
+     * 查询时间 阈值，30秒
      */
     public static final long QUERY_TIME_LIMIT = 30 * 1000;
 
@@ -162,10 +162,6 @@ public abstract class MongoDAOSupport<T extends Object> {
         return false;
     }
 
-    protected List<String> getDistinctList(String distinct, String query) {
-        return getCollection().distinct(distinct).query(query).as(String.class);
-    }
-    
     public List<T> getListWithDocument(String query) {
         return toList((MongoCursor<T>) getCollection().find(query).as(entityClass));
     }
