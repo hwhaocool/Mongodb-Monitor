@@ -1,5 +1,7 @@
 package com.fanggeek.mm.db.dao;
 
+import java.util.List;
+
 import org.jongo.Jongo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -52,6 +54,10 @@ public class SlowOpRecordDAO extends MongoDAOSupport<SlowOpRecordDocument>{
         }
         
         return false;
+    }
+    
+    public List<SlowOpRecordDocument> sha1Match(List<String> sha1List) {
+        return getListWithDocument("{sha1: {$in: #}}", sha1List, "sha1: 1");
     }
 
     

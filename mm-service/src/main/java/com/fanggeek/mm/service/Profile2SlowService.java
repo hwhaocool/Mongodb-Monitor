@@ -45,25 +45,25 @@ public class Profile2SlowService {
     public void recordAndSave2Other() {
         LOGGER.info("RecordSystemProfileTask recordAndSave2Other");
         
-        //全部查出来
+        //1. 全部查出来
         //因为是一个 capped collection，固定集合，大小固定为1M，所以内存不会有什么问题
         List<BasicDBObject> list = profileDAO.getList(0);
         
         LOGGER.info("recordAndSave2Other length is {}", list.size());
         
-        List<SlowOpRecordDocument> collect = list.stream()
+        // 2. 得到 符合慢查询阈值的 doc 列表
+        List<SlowOpRecordDocument> matchCostList = list.stream()
                 .map( x -> genDoc(x))
                 //耗时 增加条件，不一定所有的都记录
                 .filter(x -> isCostTimeMatchCondition(x))
-                //因为是固定集合，所以当慢查询不多的时候，很容易就重复了，需要排除一下
-                .filter( x -> sha1Consition(x) )
                 .collect(Collectors.toList());
         
-        //1. collect 本身的 sha1 是否会重复呢？
-        Map<String, List<SlowOpRecordDocument>> collect2 = collect.stream()
+        
+        //3. collect 本身的 sha1 是否会重复呢？ (sha1 策略可能存在问题)
+        Map<String, List<SlowOpRecordDocument>> collect2 = matchCostList.stream()
             .collect(Collectors.groupingBy(SlowOpRecordDocument::getSha1));
         
-        if (collect2.size() != collect.size()) {
+        if (collect2.size() != matchCostList.size()) {
             //数量不相等，说明有重复的
             //找到，打印并退出
             collect2.entrySet().stream()
@@ -76,17 +76,20 @@ public class Profile2SlowService {
             return;
         }
         
-        if (CollectionUtils.isEmpty(collect)) {
+        // 4. 数据可能重复(因为是 固定集合)，需要根据 sha1 字段进行数据库去重
+        List<SlowOpRecordDocument> sha1UniqueList = getSha1UniqueList(matchCostList);
+        
+        if (CollectionUtils.isEmpty(sha1UniqueList)) {
             return;
         }
         
-        //1. 保存
-        slowOpRecordDAO.saves(collect);
+        //5. 保存
+        slowOpRecordDAO.saves(sha1UniqueList);
         
-        // 2. 解析 + 告警
-        analysisAndAlarm(collect);
+        // 6. 解析 + 告警
+        analysisAndAlarm(sha1UniqueList);
         
-        LOGGER.info("recordAndSave2Other end, save {} doc", collect.size());
+        LOGGER.info("recordAndSave2Other end, save {} doc", sha1UniqueList.size());
     }
     
     private void analysisAndAlarm(List<SlowOpRecordDocument> list) {
@@ -116,21 +119,30 @@ public class Profile2SlowService {
     }
     
     /**
-     * <br>sha1 不重复的时候，可以保存
+     * <br>得到 sha1 唯一的 document 列表
      *
-     * @param document
+     * @param matchCostList
      * @return
      * @author YellowTail
-     * @since 2019-07-16
+     * @since 2019-12-26
      */
-    private boolean sha1Consition(SlowOpRecordDocument document) {
-        boolean sha1Exist = slowOpRecordDAO.isSha1Exist(document.getSha1());
+    private List<SlowOpRecordDocument> getSha1UniqueList(List<SlowOpRecordDocument> matchCostList) {
+        // 1. 当前 doc 的 sha1 列表
+        List<String> sha1List = matchCostList.stream()
+                .map(SlowOpRecordDocument::getSha1)
+                .collect(Collectors.toList());
         
-        if (sha1Exist) {
-            LOGGER.info("sha1 {} duplicate,", document.getSha1());
-        }
+        // 2. 数据库已存在的 sha1 列表
+        List<SlowOpRecordDocument> sha1Match = slowOpRecordDAO.sha1Match(sha1List);
         
-        return ! sha1Exist;
+        List<String> dbExistSha1List = sha1Match.stream()
+            .map(SlowOpRecordDocument::getSha1)
+            .collect(Collectors.toList());
+        
+        // 3. 剔除
+        return matchCostList.stream()
+            .filter(d -> ! dbExistSha1List.contains(d.getSha1()))
+            .collect(Collectors.toList());
     }
     
     /**

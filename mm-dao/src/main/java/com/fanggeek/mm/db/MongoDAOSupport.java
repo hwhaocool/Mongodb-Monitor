@@ -183,6 +183,12 @@ public abstract class MongoDAOSupport<T extends Object> {
         return toList((MongoCursor<T>) getCollection().find(query, parameters).as(entityClass));
     }
     
+    public List<T> getListWithDocument(String query, Object queryParameters, String projection) {
+        return toList((MongoCursor<T>) getCollection().find(query, queryParameters)
+                .projection(projection)
+                .as(entityClass));
+    }
+    
     public List<T> getListWithDocument(String query, String sort, int limit) {
         return toList((MongoCursor<T>) getCollection().find(query).sort(sort).skip(0).limit(limit).as(entityClass));
     }
