@@ -51,23 +51,6 @@
             <artifactId>joda-time</artifactId>
         </dependency>
     
-        <!-- 文档 -->
-        <dependency>
-            <groupId>com.fanggeek</groupId>
-            <artifactId>document</artifactId>
-        </dependency>
-        
-        <!-- 我们自己的common包 -->
-        <dependency>
-            <groupId>com.fanggeek</groupId>
-            <artifactId>common-tools</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fanggeek</groupId>
-            <artifactId>common-service</artifactId>
-        </dependency>
-        
         <!-- jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -84,16 +67,19 @@
             <artifactId>jackson-datatype-joda</artifactId>
         </dependency>
         
+        <!-- logback jar start -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+        
 
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>public</id>
-            <name>public Repository</name>
-            <url>http://192.168.2.100:18081/repository/maven-public/</url>
-        </repository>
-    </repositories>
 
 
 </project>

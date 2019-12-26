@@ -39,20 +39,12 @@
             <version>1.0</version>
         </dependency>
         
-        <!-- apollo 配置中心  -->
         <dependency>
-            <groupId>com.fanggeek</groupId>
-            <artifactId>fanggeek-apollo-client</artifactId>
-            <version>1.5</version>
+             <groupId>org.springframework</groupId>
+             <artifactId>spring-webflux</artifactId>
         </dependency>
+        
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>public</id>
-            <name>public Repository</name>
-            <url>http://192.168.2.100:18081/repository/maven-public/</url>
-        </repository>
-    </repositories>
 
 </project>

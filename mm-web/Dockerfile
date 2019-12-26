@@ -1,21 +1,21 @@
 # 指定基础镜像，必须为第一个命令
-FROM registry.cn-shenzhen.aliyuncs.com/cuishiwen/geek-java8-v1:latest
+FROM registry.cn-shenzhen.aliyuncs.com/cuishiwen/geek-java8:v5
 
 # 维护者信息
-MAINTAINER AndrewYan
+MAINTAINER Yellowtail
 
 # 更新时间
-ENV REFRESHED_AT 2019-06-26
+ENV REFRESHED_AT 2019-12-25
 
 # 拷贝代码
 # RUN：构建镜像时执行的命令， 创建工作目录文件夹
-RUN mkdir /ms-msg
+RUN mkdir /mm
 
 # 指定当前目标工作路径
-WORKDIR /ms-msg/
+WORKDIR /mm/
 
 # COPY 将本地文件复制到容器中
-COPY target/msg-web-1.0.jar .
+COPY target/mm-web-1.0.jar .
 
 # ENV 设置环境变量
 ENV JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom"
