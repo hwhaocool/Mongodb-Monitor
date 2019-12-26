@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -13,10 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fanggeek.common.json.JSON2Helper;
+import com.fanggeek.mm.common.json.JSON2Helper;
 import com.fanggeek.mm.dao.model.doc.SlowOpRecordDocument;
 import com.fanggeek.mm.db.dao.ProfileDAO;
 import com.fanggeek.mm.db.dao.SlowOpRecordDAO;
+import com.fanggeek.mm.service.ana.AnalysisService;
+import com.fanggeek.mm.service.threshold.RecordThreshold;
 import com.mongodb.BasicDBObject;
 
 @Service
@@ -29,6 +32,9 @@ public class Profile2SlowService {
     
     @Autowired
     private SlowOpRecordDAO slowOpRecordDAO;
+    
+    @Autowired
+    private AnalysisService analysisService;
 
     /**
      * <br> 读取 profile 并记录下来
@@ -50,12 +56,41 @@ public class Profile2SlowService {
                 //耗时 增加条件，不一定所有的都记录
                 .filter(x -> isCostTimeMatchCondition(x))
                 //因为是固定集合，所以当慢查询不多的时候，很容易就重复了，需要排除一下
-                .filter( x -> saveBySha1Consition(x) )
+                .filter( x -> sha1Consition(x) )
                 .collect(Collectors.toList());
         
+        //1. collect 本身的 sha1 是否会重复呢？
+        Map<String, List<SlowOpRecordDocument>> collect2 = collect.stream()
+            .collect(Collectors.groupingBy(SlowOpRecordDocument::getSha1));
+        
+        if (collect2.size() != collect.size()) {
+            //数量不相等，说明有重复的
+            //找到，打印并退出
+            collect2.entrySet().stream()
+                .filter(e -> (e.getValue().size() > 1) )
+                .findAny()
+                .ifPresent(e -> {
+                    LOGGER.error("found sha1 duplicate! sha1 {}, doc {}", e.getKey(), e.getValue());
+                });
+            
+            return;
+        }
+        
+        if (CollectionUtils.isEmpty(collect)) {
+            return;
+        }
+        
+        //1. 保存
         slowOpRecordDAO.saves(collect);
         
+        // 2. 解析 + 告警
+        analysisAndAlarm(collect);
+        
         LOGGER.info("recordAndSave2Other end, save {} doc", collect.size());
+    }
+    
+    private void analysisAndAlarm(List<SlowOpRecordDocument> list) {
+        analysisService.analysisAndAlarm(list);
     }
     
     /**
@@ -68,25 +103,12 @@ public class Profile2SlowService {
      * @since 2019-07-16
      */
     private boolean isCostTimeMatchCondition(SlowOpRecordDocument document) {
-        Map<String, String> getenv = System.getenv();
-        
-        String minCost = getenv.getOrDefault("min-cost", "1000");
-        
-        int limit = 1000;
-        try {
-            limit = Integer.parseInt(minCost);
-        } catch (NumberFormatException e) {
-            LOGGER.info("env min-cost {} is invalid number format ", minCost);
-        }
-        
-        LOGGER.info("current min cost limit is {}", limit);
-        
         Integer millis = document.getMillis();
         if (null == millis) {
             return false;
         }
         
-        if (millis.intValue() >= limit) {
+        if (millis.intValue() >= RecordThreshold.minCost()) {
             return true;
         }
         
@@ -101,7 +123,7 @@ public class Profile2SlowService {
      * @author YellowTail
      * @since 2019-07-16
      */
-    private boolean saveBySha1Consition(SlowOpRecordDocument document) {
+    private boolean sha1Consition(SlowOpRecordDocument document) {
         boolean sha1Exist = slowOpRecordDAO.isSha1Exist(document.getSha1());
         
         if (sha1Exist) {
@@ -153,7 +175,7 @@ public class Profile2SlowService {
      * @since 2019-07-16
      */
     private void genAndSetHashCode(SlowOpRecordDocument document) {
-        //在哪个时间{ts} 谁{user} 对谁{ns} 进行了什么操作{op}
+        //在哪个时间{ts} 谁{user} 对谁{ns} 进行了什么操作{op}， 花了多久{millis} 数据库放弃了多少次{numYield}
         
         Date createTime = document.getCreateTime();
         String user = document.getUser();
@@ -163,7 +185,7 @@ public class Profile2SlowService {
         DateTime dateTime = new DateTime(createTime);
         String dateStr = dateTime.toString("yyyy-MM-dd HH:mm:ss.SSS");
         
-        String combineStr = String.format("%s%s%s%s", dateStr, user, ns, op);
+        String combineStr = String.format("%s%s%s%s%d%d", dateStr, user, ns, op, document.getMillis(), document.getNumYield());
         
         String sha1Hex = DigestUtils.sha1Hex(combineStr);
         
