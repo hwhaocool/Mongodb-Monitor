@@ -1,7 +1,7 @@
 package com.fanggeek.msg.service.config;
 
-import com.fanggeek.base.service.redis.RedisAbstractService;
-import com.fanggeek.base.service.redis.RedisUrlManager;
+//import com.fanggeek.base.service.redis.RedisAbstractService;
+//import com.fanggeek.base.service.redis.RedisUrlManager;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,15 +28,15 @@ public class RedisConfig {
         this.envName = envName;
     }
 
-    @Bean(name="agentRedisService")
-    public RedisAbstractService agentRedisService() {
-        return RedisUrlManager.getAgentRedis(envName);
-    }
-    
-    @Bean(name="userRedisService")
-    public RedisAbstractService userRedisService() {
-        return RedisUrlManager.getUserRedis(envName);
-    }
+//    @Bean(name="agentRedisService")
+//    public RedisAbstractService agentRedisService() {
+//        return RedisUrlManager.getAgentRedis(envName);
+//    }
+//    
+//    @Bean(name="userRedisService")
+//    public RedisAbstractService userRedisService() {
+//        return RedisUrlManager.getUserRedis(envName);
+//    }
         
 
 }
