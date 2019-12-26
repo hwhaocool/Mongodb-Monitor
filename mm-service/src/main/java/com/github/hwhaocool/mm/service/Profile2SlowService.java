@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fanggeek.mm.common.json.JSON2Helper;
-import com.fanggeek.mm.dao.model.doc.SlowOpRecordDocument;
-import com.fanggeek.mm.db.dao.ProfileDAO;
-import com.fanggeek.mm.db.dao.SlowOpRecordDAO;
+import com.github.hwhaocool.mm.common.json.JSON2Helper;
+import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
+import com.github.hwhaocool.mm.db.dao.ProfileDAO;
+import com.github.hwhaocool.mm.db.dao.SlowOpRecordDAO;
 import com.github.hwhaocool.mm.service.ana.AnalysisService;
 import com.github.hwhaocool.mm.service.threshold.RecordThreshold;
 import com.mongodb.BasicDBObject;

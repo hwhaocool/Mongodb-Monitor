@@ -27,14 +27,14 @@
     <dependencies>
         <!-- 依赖 mm-common 模块 -->
         <dependency>
-            <groupId>com.fanggeek.mm</groupId>
+            <groupId>com.github.hwhaocool.mm</groupId>
             <artifactId>mm-common</artifactId>
             <version>1.0</version>
         </dependency>
 
         <!-- 依赖 mm-dao 模块-->
         <dependency>
-            <groupId>com.fanggeek.mm</groupId>
+            <groupId>com.github.hwhaocool.mm</groupId>
             <artifactId>mm-dao</artifactId>
             <version>1.0</version>
         </dependency>

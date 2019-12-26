@@ -5,11 +5,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.fanggeek.mm.common.constants.Constants;
+import com.github.hwhaocool.mm.common.constants.Constants;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
-import com.mongodb.MongoClientURI;
 import com.mongodb.MongoClientOptions.Builder;
+import com.mongodb.MongoClientURI;
 
 @Configuration
 @ConfigurationProperties(prefix = "save-mongodb")

@@ -1,6 +1,6 @@
 package com.github.hwhaocool.mm.service.opalarm.impl;
 
-import com.fanggeek.mm.dao.model.doc.SlowOpRecordDocument;
+import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
 import com.github.hwhaocool.mm.service.opalarm.IAlarm;
 import com.github.hwhaocool.mm.service.threshold.AlarmThreshold;
 

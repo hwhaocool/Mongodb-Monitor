@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fanggeek.mm.model.vo.HealthInfo;
+import com.github.hwhaocool.mm.model.vo.HealthInfo;
 
 /**
  * <br>健康检查接口

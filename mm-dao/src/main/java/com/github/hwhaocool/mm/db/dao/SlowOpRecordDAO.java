@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import com.fanggeek.mm.common.constants.Constants;
+import com.github.hwhaocool.mm.common.constants.Constants;
 import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
 import com.github.hwhaocool.mm.db.MongoDAOSupport;
 

@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fanggeek.mm.dao.model.doc.SlowOpRecordDocument;
+import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
 import com.github.hwhaocool.mm.service.alarm.AlarmSendService;
 import com.github.hwhaocool.mm.service.alarm.DBAlarmObject;
 import com.github.hwhaocool.mm.service.opalarm.IAlarm;

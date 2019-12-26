@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fanggeek.mm.model.vo.SlowList;
-import com.fanggeek.mm.service.SlowOpService;
+import com.github.hwhaocool.mm.model.vo.SlowList;
+import com.github.hwhaocool.mm.service.SlowOpService;
 
 
 /**

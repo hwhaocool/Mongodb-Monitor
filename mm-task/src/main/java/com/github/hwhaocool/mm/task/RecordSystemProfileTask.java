@@ -3,10 +3,9 @@ package com.github.hwhaocool.mm.task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.fanggeek.mm.service.Profile2SlowService;
+import com.github.hwhaocool.mm.service.Profile2SlowService;
 
 @Component
 public class RecordSystemProfileTask {
@@ -21,7 +20,7 @@ public class RecordSystemProfileTask {
         
         LOGGER.info("RecordSystemProfileTask recordTask start");
         
-        profile2SlowService.recordAndSave2Other();
+        profile2SlowService.recordAndSave2Other();  
         
         LOGGER.info("RecordSystemProfileTask recordTask end");
     }

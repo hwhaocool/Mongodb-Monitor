@@ -1,6 +1,6 @@
 package com.github.hwhaocool.mm.service.opalarm;
 
-import com.fanggeek.mm.dao.model.doc.SlowOpRecordDocument;
+import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
 
 public interface IAlarm {
     

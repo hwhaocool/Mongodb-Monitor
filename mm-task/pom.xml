@@ -27,17 +27,10 @@
     <dependencies>
         <!-- 依赖 mm-service 模块-->
         <dependency>
-            <groupId>com.fanggeek.mm</groupId>
+            <groupId>com.github.hwhaocool.mm</groupId>
             <artifactId>mm-service</artifactId>
             <version>1.0</version>
         </dependency>
-        
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        
         
     </dependencies>
 

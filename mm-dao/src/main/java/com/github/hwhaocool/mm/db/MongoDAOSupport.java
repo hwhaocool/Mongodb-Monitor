@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.fanggeek.mm.common.utils.GenericsUtils;
+import com.github.hwhaocool.mm.common.utils.GenericsUtils;
 import com.mongodb.BasicDBObject;
 
 @Component

@@ -38,20 +38,20 @@
 
         <!-- 依赖 mm-common 模块-->
         <dependency>
-            <groupId>com.fanggeek.mm</groupId>
+            <groupId>com.github.hwhaocool.mm</groupId>
             <artifactId>mm-common</artifactId>
             <version>1.0</version>
         </dependency>
 
         <!-- 依赖 mm-service 模块-->
         <dependency>
-            <groupId>com.fanggeek.mm</groupId>
+            <groupId>com.github.hwhaocool.mm</groupId>
             <artifactId>mm-service</artifactId>
             <version>1.0</version>
         </dependency>
         
         <dependency>
-            <groupId>com.fanggeek.mm</groupId>
+            <groupId>com.github.hwhaocool.mm</groupId>
             <artifactId>mm-task</artifactId>
             <version>1.0</version>
         </dependency>
