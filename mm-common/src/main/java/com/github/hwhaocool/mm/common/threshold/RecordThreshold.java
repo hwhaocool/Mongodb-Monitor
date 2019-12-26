@@ -1,9 +1,11 @@
-package com.github.hwhaocool.mm.service.threshold;
+package com.github.hwhaocool.mm.common.threshold;
 
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.hwhaocool.mm.common.constants.Constants;
 
 /**
  * <br> 阈值： 何时该 把慢日志记录下来供分析
@@ -20,7 +22,7 @@ public class RecordThreshold {
     static {
         Map<String, String> getenv = System.getenv();
         
-        String str = getenv.getOrDefault("min-cost", "1000");
+        String str = getenv.getOrDefault(Constants.Env.COST, "1000");
         
         try {
             minCost = Integer.parseInt(str);
