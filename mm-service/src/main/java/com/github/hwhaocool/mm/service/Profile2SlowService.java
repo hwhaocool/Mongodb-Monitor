@@ -15,11 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.hwhaocool.mm.common.json.JSON2Helper;
+import com.github.hwhaocool.mm.common.threshold.RecordThreshold;
 import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
 import com.github.hwhaocool.mm.db.dao.ProfileDAO;
 import com.github.hwhaocool.mm.db.dao.SlowOpRecordDAO;
 import com.github.hwhaocool.mm.service.ana.AnalysisService;
-import com.github.hwhaocool.mm.service.threshold.RecordThreshold;
 import com.mongodb.BasicDBObject;
 
 @Service

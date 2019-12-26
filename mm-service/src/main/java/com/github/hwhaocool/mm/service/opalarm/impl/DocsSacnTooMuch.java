@@ -1,8 +1,8 @@
 package com.github.hwhaocool.mm.service.opalarm.impl;
 
+import com.github.hwhaocool.mm.common.threshold.AlarmThreshold;
 import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
 import com.github.hwhaocool.mm.service.opalarm.IAlarm;
-import com.github.hwhaocool.mm.service.threshold.AlarmThreshold;
 
 /**
  * <br>扫描文档过多， 要么是代码有问题，要么是产品设计有问题

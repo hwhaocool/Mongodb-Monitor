@@ -35,7 +35,7 @@ public class AnalysisService {
         });
     }
     
-    private void sendAlarm(SlowOpRecordDocument doc, IAlarm checker) {
+    public void sendAlarm(SlowOpRecordDocument doc, IAlarm checker) {
         
         DBAlarmObject alarmObject = new DBAlarmObject()
                 .recordId(doc.get_id())
@@ -43,5 +43,5 @@ public class AnalysisService {
         
         alarmSendService.sendAlarm(alarmObject);
     }
-
+    
 }

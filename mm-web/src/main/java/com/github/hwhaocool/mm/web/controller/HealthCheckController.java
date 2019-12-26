@@ -22,9 +22,6 @@ import com.github.hwhaocool.mm.model.vo.HealthInfo;
 @RestController
 public class HealthCheckController {
     
-//    @ApolloConfig
-//    private Config config;
-    
     //健康检查接口
     @RequestMapping(value = "/health", method = RequestMethod.GET)
     public HealthInfo info( HttpServletRequest request) {
@@ -39,8 +36,6 @@ public class HealthCheckController {
         
         info.setTip("anything is fine");
         
-//        info.setTip(config.getProperty("test", "default"));
-
         return info;
     }
     

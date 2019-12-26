@@ -29,6 +29,8 @@ public abstract class AlarmObject {
      */
     protected Map<String, String> alarmInfo;
     
+    protected Map.Entry<String, String> jumpUrl;
+    
     public AlarmObject() {
         alarmInfo  = new LinkedHashMap<>();
     }
@@ -93,6 +95,12 @@ public abstract class AlarmObject {
                 sb.append("> ").append(k).append(": <font color=\"comment\">").append(v).append("</font> \n\n");
             });
         }
+        
+        if (null != jumpUrl) {
+            sb.append("> ").append(String.format("[%s](%s)", jumpUrl.getKey(), jumpUrl.getValue())).append("\n");
+        }
+        
+        System.out.println(sb.toString());
         
         return sb.toString();
     }
