@@ -23,7 +23,7 @@ public class DBAlarmObject extends AlarmObject{
         
         String url = String.format("%s/api/mm/slow/details?id=%s", host, id);
         
-        jumpUrl = new AbstractMap.SimpleEntry<String, String>("click here to see details", url);
+        jumpUrl = new AbstractMap.SimpleEntry<String, String>("click me to see details", url);
         
         return this;
     }
