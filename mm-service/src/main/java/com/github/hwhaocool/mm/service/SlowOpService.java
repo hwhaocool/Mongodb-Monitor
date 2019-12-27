@@ -24,13 +24,13 @@ public class SlowOpService {
     
     public String queryById(String id) {
         if (StringUtils.isBlank(id)) {
-            return "";
+            return "id is required";
         }
         
         SlowOpRecordDocument byId = slowOpRecordDAO.getById(id);
         
         if (null == byId) {
-            return "";
+            return "id not exist";
         }
         
         try {
@@ -39,7 +39,7 @@ public class SlowOpService {
             e.printStackTrace();
         }
         
-        return "";
+        return "error";
     }
     
 }

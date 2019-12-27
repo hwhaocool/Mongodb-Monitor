@@ -1,5 +1,7 @@
 package com.github.hwhaocool.mm.web.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,12 +22,16 @@ import com.github.hwhaocool.mm.service.SlowOpService;
 @RestController
 public class SlowController {
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(SlowController.class);
+    
     @Autowired
     private SlowOpService slowService;
     
     //健康检查接口
     @RequestMapping(value = "/details", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String info2(@RequestParam(value = "id", required = false) final String id) {
+    public String details(@RequestParam(value = "id", required = false) final String id) {
+        
+        LOGGER.info("SlowController details, id {}", id);
         
         return slowService.queryById(id);
     }
