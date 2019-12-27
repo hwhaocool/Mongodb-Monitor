@@ -32,7 +32,7 @@ public class AnalysisService {
         
         List<IAlarm> checkerList = new ArrayList<>();
         checkerList.add(new IndexMiss());
-        checkerList.add(new IndexPart());
+        checkerList.add(new IndexPart(thresholdService));
         checkerList.add(new DocsSacnTooMuch(thresholdService));
         
         list.forEach(doc -> {

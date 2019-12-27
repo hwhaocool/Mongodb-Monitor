@@ -17,7 +17,7 @@ public class IndexMiss implements IAlarm {
     }
 
     public String tips() {
-        return "天啦撸！ 没有加索引！";
+        return "天啦撸！ 没有加索引！, [条件] keysExamined == 0";
     }
 
 }

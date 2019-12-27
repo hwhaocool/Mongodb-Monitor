@@ -17,6 +17,23 @@ public class ThresholdService {
      */
     @Value("${threshold.min-cost}")
     private Integer minCostThreshold;
+    
+    /**
+     * docsExamined 和 keysExamined 差距 阈值
+     */
+    @Value("${threshold.key-docs-scan-gap}")
+    private Integer keyDocsScanGap;
+
+    /**
+     * <br>docsExamined 和 keysExamined 差距 阈值
+     *
+     * @return
+     * @author YellowTail
+     * @since 2019-12-27
+     */
+    public Integer getKeyDocsScanGap() {
+        return keyDocsScanGap;
+    }
 
     /**
      * <br>最大文档扫描数
