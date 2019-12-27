@@ -88,7 +88,7 @@ public abstract class AlarmObject {
             .append(" ").append(getIp())
             .append(" ").append(appName)
             .append(" 实时新增告警")
-            .append(" <font color=\"warning\">").append(getBusinessName()).append("</font>，请相关同事注意。\n");
+            .append(" <font color=\"#FF1493\">").append(getBusinessName()).append("</font>，请相关同事注意。\n");
         
         if (null != alarmInfo) {
             alarmInfo.forEach( (k,v) -> {
