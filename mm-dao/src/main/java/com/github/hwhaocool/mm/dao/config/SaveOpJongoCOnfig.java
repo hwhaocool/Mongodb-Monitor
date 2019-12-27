@@ -30,6 +30,7 @@ public class SaveOpJongoCOnfig {
         return mongoClient;
     }
 
+    @SuppressWarnings("deprecation")
     @Bean("saveJongo")
     public Jongo jongo() {
         return new Jongo(mongoClient().getDB(database));

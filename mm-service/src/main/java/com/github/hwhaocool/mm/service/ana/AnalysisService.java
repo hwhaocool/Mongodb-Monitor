@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
@@ -13,19 +14,26 @@ import com.github.hwhaocool.mm.service.opalarm.IAlarm;
 import com.github.hwhaocool.mm.service.opalarm.impl.DocsSacnTooMuch;
 import com.github.hwhaocool.mm.service.opalarm.impl.IndexMiss;
 import com.github.hwhaocool.mm.service.opalarm.impl.IndexPart;
+import com.github.hwhaocool.mm.service.threshold.ThresholdService;
 
 @Service
 public class AnalysisService {
     
+    @Value("${common.details-host}")
+    private String detailsHost;
+    
     @Autowired
     private AlarmSendService alarmSendService;
+    
+    @Autowired
+    private ThresholdService thresholdService;
     
     public void analysisAndAlarm(List<SlowOpRecordDocument> list) {
         
         List<IAlarm> checkerList = new ArrayList<>();
         checkerList.add(new IndexMiss());
         checkerList.add(new IndexPart());
-        checkerList.add(new DocsSacnTooMuch());
+        checkerList.add(new DocsSacnTooMuch(thresholdService));
         
         list.forEach(doc -> {
             checkerList.stream()
@@ -39,6 +47,7 @@ public class AnalysisService {
         
         DBAlarmObject alarmObject = new DBAlarmObject()
                 .recordId(doc.get_id())
+                .jumpHost(doc.get_id(), detailsHost)
                 .tips(checker.tips());
         
         alarmSendService.sendAlarm(alarmObject);

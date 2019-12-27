@@ -1,24 +1,38 @@
 ## env
 spring:
   profiles:
-    active: local
+    active: default
     
 server:
   port: 8080
   
 common:
-   envName: local
-   robotKey: xxx
+   #当前环境名称
+   env-name: ${env-name:test}
+   
+   # 机器人key
+   robot-key: ${robot-key}
+   #详情跳转链接的域名
+   details-host: ${details-host}
+   
+# 阈值
+threshold:
+   # 最大文档扫描数
+   max-docs: ${max-docs:100000}
+   # 查询耗时阈值
+   min-cost: ${min-cost:2000}
+   
     
 # monitor 表示要监控的数据库， 这里的配置需要自行修改
 monitor-major-mongodb:
-  client-uri: mongodb://name:passwd@db-major-primary:3717,db-major-secondary:3717
-  database:  ${major-db:db1}
+  # 比如： mongodb://name:passwd@db-major-primary:3717,db-major-secondary:3717/db
+  client-uri: ${major-db-uri}
+  database:  ${major-db}
   connections-per-host: 50
 
 
 # save 表示数据要保存到的数据库
 save-mongodb:
-  client-uri: mongodb://name:passwd@db-save-primary:3717,db-save-secondary:3717
-  database: ${save-db:db2}
+  client-uri: ${save-db-uri}
+  database: ${save-db}
   connections-per-host: 50

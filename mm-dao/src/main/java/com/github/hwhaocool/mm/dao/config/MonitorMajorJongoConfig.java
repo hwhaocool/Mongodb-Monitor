@@ -30,6 +30,7 @@ public class MonitorMajorJongoConfig {
         return mongoClient;
     }
 
+    @SuppressWarnings("deprecation")
     @Bean("monitorMajorJongo")
     public Jongo jongo() {
         return new Jongo(mongoClient().getDB(database));

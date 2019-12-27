@@ -16,7 +16,7 @@ import com.github.hwhaocool.mm.service.SlowOpService;
  * @author YellowTail
  * @since 2019-07-12
  */
-@RequestMapping("/api/slow/")
+@RequestMapping("/api/mm/slow/")
 @RestController
 public class SlowController {
     

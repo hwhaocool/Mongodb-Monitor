@@ -15,11 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.hwhaocool.mm.common.json.JSON2Helper;
-import com.github.hwhaocool.mm.common.threshold.RecordThreshold;
 import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
 import com.github.hwhaocool.mm.db.dao.ProfileDAO;
 import com.github.hwhaocool.mm.db.dao.SlowOpRecordDAO;
 import com.github.hwhaocool.mm.service.ana.AnalysisService;
+import com.github.hwhaocool.mm.service.threshold.ThresholdService;
 import com.mongodb.BasicDBObject;
 
 @Service
@@ -35,6 +35,9 @@ public class Profile2SlowService {
     
     @Autowired
     private AnalysisService analysisService;
+    
+    @Autowired
+    private ThresholdService thresholdService;
 
     /**
      * <br> 读取 profile 并记录下来
@@ -111,7 +114,7 @@ public class Profile2SlowService {
             return false;
         }
         
-        if (millis.intValue() >= RecordThreshold.minCost()) {
+        if (millis.intValue() >= thresholdService.getMinCostThreshold()) {
             return true;
         }
         

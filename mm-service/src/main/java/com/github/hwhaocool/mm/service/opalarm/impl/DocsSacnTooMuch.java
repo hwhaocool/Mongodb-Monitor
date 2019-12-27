@@ -1,8 +1,8 @@
 package com.github.hwhaocool.mm.service.opalarm.impl;
 
-import com.github.hwhaocool.mm.common.threshold.AlarmThreshold;
 import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
 import com.github.hwhaocool.mm.service.opalarm.IAlarm;
+import com.github.hwhaocool.mm.service.threshold.ThresholdService;
 
 /**
  * <br>扫描文档过多， 要么是代码有问题，要么是产品设计有问题
@@ -11,9 +11,15 @@ import com.github.hwhaocool.mm.service.opalarm.IAlarm;
  * @since 2019-12-25
  */
 public class DocsSacnTooMuch  implements IAlarm  {
+    
+    private ThresholdService thresholdService;
+    
+    public DocsSacnTooMuch(ThresholdService service) {
+        thresholdService = service;
+    }
 
     public boolean match(SlowOpRecordDocument doc) {
-        return doc.getDocsExamined() > AlarmThreshold.getDocsThreshold();
+        return doc.getDocsExamined() > thresholdService.getDocsExaminedThreshold();
     }
 
     public String tips() {
