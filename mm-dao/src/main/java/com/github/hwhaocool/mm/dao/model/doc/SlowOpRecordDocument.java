@@ -6,6 +6,12 @@ import org.bson.types.ObjectId;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * <br> 字段介绍在 https://docs.mongodb.com/v3.4/reference/database-profiler/index.html
+ *
+ * @author YellowTail
+ * @since 2019-12-27
+ */
 public class SlowOpRecordDocument {
     
     private ObjectId _id;                     //_d
