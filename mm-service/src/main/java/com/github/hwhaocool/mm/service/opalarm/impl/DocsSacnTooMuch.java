@@ -14,16 +14,21 @@ public class DocsSacnTooMuch  implements IAlarm  {
     
     private ThresholdService thresholdService;
     
+    private SlowOpRecordDocument document;
+    
     public DocsSacnTooMuch(ThresholdService service) {
         thresholdService = service;
     }
 
     public boolean match(SlowOpRecordDocument doc) {
+        //doc 存下来，提示信息要用到
+        document = doc;
+        
         return doc.getDocsExamined() > thresholdService.getDocsExaminedThreshold();
     }
 
     public String tips() {
-        return "扫描文档数过多，代码or产品设计有问题, [条件]docsExamined 大于阈值";
+        return String.format("扫描文档数过多[%d 万]，代码or产品设计有问题, [条件]docsExamined 大于阈值", document.getDocsExamined() / 1000);
     }
 
 }
