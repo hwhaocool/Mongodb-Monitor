@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SlowOpRecordDocument {
     
-    private ObjectId _id;                     //_d
+    private ObjectId _id;                     //_id
     
     private String sha1;                    // 对一些字段进行hash，来避免重复
     
@@ -390,14 +390,13 @@ public class SlowOpRecordDocument {
 
     @Override
     public String toString() {
-        return "SlowOpRecordDocument [_id=" + _id + ", createTime=" + createTime + ", op=" + op + ", db=" + db + ", ns="
-                + ns + ", query=" + query + ", command=" + command + ", originatingCommand=" + originatingCommand
-                + ", keysExamined=" + keysExamined + ", docsExamined=" + docsExamined + ", cursorExhausted="
-                + cursorExhausted + ", numYield=" + numYield + ", locks=" + locks + ", nreturned=" + nreturned
-                + ", responseLength=" + responseLength + ", protocol=" + protocol + ", millis=" + millis
-                + ", planSummary=" + planSummary + ", execStats=" + execStats + ", client=" + client + ", user=" + user
-                + "]";
+        return "SlowOpRecordDocument [_id=" + _id + ", sha1=" + sha1 + ", createTime=" + createTime + ", op=" + op
+                + ", db=" + db + ", ns=" + ns + ", query=" + query + ", command=" + command + ", originatingCommand="
+                + originatingCommand + ", keysExamined=" + keysExamined + ", docsExamined=" + docsExamined
+                + ", cursorExhausted=" + cursorExhausted + ", numYield=" + numYield + ", locks=" + locks
+                + ", nreturned=" + nreturned + ", responseLength=" + responseLength + ", protocol=" + protocol
+                + ", millis=" + millis + ", planSummary=" + planSummary + ", execStats=" + execStats + ", client="
+                + client + ", user=" + user + "]";
     }
-
     
 }
