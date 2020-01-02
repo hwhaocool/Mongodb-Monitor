@@ -1,6 +1,5 @@
 package com.github.hwhaocool.mm.service.ana;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +9,8 @@ import org.springframework.stereotype.Service;
 import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
 import com.github.hwhaocool.mm.service.alarm.AlarmSendService;
 import com.github.hwhaocool.mm.service.alarm.DBAlarmObject;
+import com.github.hwhaocool.mm.service.alarm.MatchRuleTmp;
 import com.github.hwhaocool.mm.service.opalarm.IAlarm;
-import com.github.hwhaocool.mm.service.opalarm.impl.DocsSacnTooMuch;
-import com.github.hwhaocool.mm.service.opalarm.impl.IndexMiss;
-import com.github.hwhaocool.mm.service.opalarm.impl.IndexPart;
-import com.github.hwhaocool.mm.service.threshold.ThresholdService;
 
 @Service
 public class AnalysisService {
@@ -25,22 +21,10 @@ public class AnalysisService {
     @Autowired
     private AlarmSendService alarmSendService;
     
-    @Autowired
-    private ThresholdService thresholdService;
     
-    public void analysisAndAlarm(List<SlowOpRecordDocument> list) {
+    public void analysisAndAlarm(List<MatchRuleTmp> list) {
         
-        List<IAlarm> checkerList = new ArrayList<>();
-        checkerList.add(new IndexMiss());
-        checkerList.add(new IndexPart(thresholdService));
-        checkerList.add(new DocsSacnTooMuch(thresholdService));
-        
-        list.forEach(doc -> {
-            checkerList.stream()
-                .filter(k -> k.match(doc)  )
-                .findAny()
-                .ifPresent(k ->  sendAlarm(doc, k ));
-        });
+        list.forEach(k -> sendAlarm(k.getDoc(), k.getChecker()));
     }
     
     public void sendAlarm(SlowOpRecordDocument doc, IAlarm checker) {

@@ -1,8 +1,11 @@
 package com.github.hwhaocool.mm.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -18,7 +21,12 @@ import com.github.hwhaocool.mm.common.json.JSON2Helper;
 import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
 import com.github.hwhaocool.mm.db.dao.ProfileDAO;
 import com.github.hwhaocool.mm.db.dao.SlowOpRecordDAO;
+import com.github.hwhaocool.mm.service.alarm.MatchRuleTmp;
 import com.github.hwhaocool.mm.service.ana.AnalysisService;
+import com.github.hwhaocool.mm.service.opalarm.IAlarm;
+import com.github.hwhaocool.mm.service.opalarm.impl.DocsSacnTooMuch;
+import com.github.hwhaocool.mm.service.opalarm.impl.IndexMiss;
+import com.github.hwhaocool.mm.service.opalarm.impl.IndexPart;
 import com.github.hwhaocool.mm.service.threshold.ThresholdService;
 import com.mongodb.BasicDBObject;
 
@@ -54,13 +62,10 @@ public class Profile2SlowService {
         
         LOGGER.info("recordAndSave2Other length is {}", list.size());
         
-        // 2. 得到 符合慢查询阈值的 doc 列表
+        // 2. 转成doc
         List<SlowOpRecordDocument> matchCostList = list.stream()
                 .map( x -> genDoc(x))
-                //耗时 增加条件，不一定所有的都记录
-                .filter(x -> isCostTimeMatchCondition(x))
                 .collect(Collectors.toList());
-        
         
         //3. collect 本身的 sha1 是否会重复呢？ (sha1 策略可能存在问题)
         Map<String, List<SlowOpRecordDocument>> collect2 = matchCostList.stream()
@@ -79,24 +84,66 @@ public class Profile2SlowService {
             return;
         }
         
-        // 4. 数据可能重复(因为是 固定集合)，需要根据 sha1 字段进行数据库去重
-        List<SlowOpRecordDocument> sha1UniqueList = getSha1UniqueList(matchCostList);
+        //4. 何时需要去保存？ 1）未分析过的 2）需要报警的 or 耗时较长的
         
+        // 4.1 未分析过的（未重复）
+        // 数据可能重复(因为是 固定集合)，需要根据 sha1 字段进行数据库去重
+        List<SlowOpRecordDocument> sha1UniqueList = getSha1UniqueList(matchCostList);
         if (CollectionUtils.isEmpty(sha1UniqueList)) {
             return;
         }
         
-        //5. 保存
-        slowOpRecordDAO.saves(sha1UniqueList);
+        // 4.2 满足告警规则
+        List<MatchRuleTmp> alarmList = getNeedAlarmList(sha1UniqueList);
         
-        // 6. 解析 + 告警
-        analysisAndAlarm(sha1UniqueList);
+        // or 耗时较长的
+        List<SlowOpRecordDocument> costList = sha1UniqueList.stream()
+            .filter(x -> isCostTimeMatchCondition(x))
+            .collect(Collectors.toList());
+        
+        // 4.2 合起来
+        Set<SlowOpRecordDocument> saveSet = new HashSet<>();
+        saveSet.addAll(alarmList.stream().map(MatchRuleTmp::getDoc).collect(Collectors.toList()));
+        saveSet.addAll(costList);
+        
+        //5. 保存
+        slowOpRecordDAO.saves(saveSet);
+        
+        // 6. 告警
+        genAndSendAlarm(alarmList);
         
         LOGGER.info("recordAndSave2Other end, save {} doc", sha1UniqueList.size());
     }
     
-    private void analysisAndAlarm(List<SlowOpRecordDocument> list) {
+    private void genAndSendAlarm(List<MatchRuleTmp> list) {
         analysisService.analysisAndAlarm(list);
+    }
+    
+    /**
+     * <br>得到需要告警的 doc列表
+     *
+     * @param list
+     * @return
+     * @author YellowTail
+     * @since 2020-01-02
+     */
+    private List<MatchRuleTmp> getNeedAlarmList(List<SlowOpRecordDocument> list) {
+        List<IAlarm> checkerList = new ArrayList<>();
+        checkerList.add(new IndexMiss());
+        checkerList.add(new IndexPart(thresholdService));
+        checkerList.add(new DocsSacnTooMuch(thresholdService));
+        
+        return list.stream()
+            .map(doc -> {
+                // 如果匹配，返回 tmp 对象， 如果不匹配，返回null
+                return checkerList.stream()
+                    .filter(k -> k.match(doc)  )
+                    .findAny()
+                    .map(k ->  new MatchRuleTmp(doc, k))
+                    .orElse(null);
+            })
+            .filter(k -> null != k)               //剔除 null 对象
+            .collect(Collectors.toList());
     }
     
     /**
