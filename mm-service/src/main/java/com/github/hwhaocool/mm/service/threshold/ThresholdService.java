@@ -23,6 +23,18 @@ public class ThresholdService {
      */
     @Value("${threshold.key-docs-scan-gap}")
     private Integer keyDocsScanGap;
+    
+    /**
+     * 最多查询多少条数据
+     */
+    @Value("${threshold.max-return-item}")
+    private Integer maxReturnItem;
+    
+    /**
+     * 最多查询多长（也许单个就比较长）
+     */
+    @Value("${threshold.max-return-length}")
+    private Integer maxReturnLength;
 
     /**
      * <br>docsExamined 和 keysExamined 差距 阈值
@@ -56,6 +68,27 @@ public class ThresholdService {
     public Integer getMinCostThreshold() {
         return minCostThreshold;
     }
-    
+
+    /**
+     * <br>最多查询多少条数据
+     *
+     * @return
+     * @author YellowTail
+     * @since 2020-01-02
+     */
+    public Integer getMaxReturnItem() {
+        return maxReturnItem;
+    }
+
+    /**
+     * <br>最多查询多长（也许单个就比较长，单位：字节）
+     *
+     * @return
+     * @author YellowTail
+     * @since 2020-01-02
+     */
+    public Integer getMaxReturnLength() {
+        return maxReturnLength;
+    }
 
 }

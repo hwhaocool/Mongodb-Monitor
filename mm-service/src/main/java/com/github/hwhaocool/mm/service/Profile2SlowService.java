@@ -27,6 +27,7 @@ import com.github.hwhaocool.mm.service.opalarm.IAlarm;
 import com.github.hwhaocool.mm.service.opalarm.impl.DocsSacnTooMuch;
 import com.github.hwhaocool.mm.service.opalarm.impl.IndexMiss;
 import com.github.hwhaocool.mm.service.opalarm.impl.IndexPart;
+import com.github.hwhaocool.mm.service.opalarm.impl.ReturnTooLong;
 import com.github.hwhaocool.mm.service.threshold.ThresholdService;
 import com.mongodb.BasicDBObject;
 
@@ -132,6 +133,7 @@ public class Profile2SlowService {
         checkerList.add(new IndexMiss());
         checkerList.add(new IndexPart(thresholdService));
         checkerList.add(new DocsSacnTooMuch(thresholdService));
+        checkerList.add(new ReturnTooLong(thresholdService));
         
         return list.stream()
             .map(doc -> {
