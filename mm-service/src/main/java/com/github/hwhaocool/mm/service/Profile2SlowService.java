@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -64,32 +63,21 @@ public class Profile2SlowService {
         LOGGER.info("recordAndSave2Other length is {}", list.size());
         
         // 2. 转成doc
-        List<SlowOpRecordDocument> matchCostList = list.stream()
+        List<SlowOpRecordDocument> docList = list.stream()
                 .map( x -> genDoc(x))
                 .collect(Collectors.toList());
         
-        //3. collect 本身的 sha1 是否会重复呢？ (sha1 策略可能存在问题)
-        Map<String, List<SlowOpRecordDocument>> collect2 = matchCostList.stream()
-            .collect(Collectors.groupingBy(SlowOpRecordDocument::getSha1));
-        
-        if (collect2.size() != matchCostList.size()) {
-            //数量不相等，说明有重复的
-            //找到，打印并退出
-            collect2.entrySet().stream()
-                .filter(e -> (e.getValue().size() > 1) )
-                .findAny()
-                .ifPresent(e -> {
-                    LOGGER.error("found sha1 duplicate! sha1 {}, doc {}", e.getKey(), e.getValue());
-                });
-            
-            return;
-        }
+        // 3. 剔除 sha1 一致的记录
+        // 在并发的时候，可能会出现， 查询条件不一样，但是 时间、用户、耗时、放弃次数等一致的情况，不想深究，直接只保留一个
+        List<SlowOpRecordDocument> collect = docList.stream()
+            .distinct()
+            .collect(Collectors.toList());
         
         //4. 何时需要去保存？ 1）未分析过的 2）需要报警的 or 耗时较长的
         
         // 4.1 未分析过的（未重复）
         // 数据可能重复(因为是 固定集合)，需要根据 sha1 字段进行数据库去重
-        List<SlowOpRecordDocument> sha1UniqueList = getSha1UniqueList(matchCostList);
+        List<SlowOpRecordDocument> sha1UniqueList = getSha1UniqueList(collect);
         if (CollectionUtils.isEmpty(sha1UniqueList)) {
             return;
         }
@@ -215,7 +203,7 @@ public class Profile2SlowService {
         SlowOpRecordDocument document = JSON2Helper.toObject(json, SlowOpRecordDocument.class);
         
         //设置 sha1
-        genAndSetHashCode(document);
+        document.setSha1(genSha1(document));
         
         document.set_id(new ObjectId());
         
@@ -242,7 +230,7 @@ public class Profile2SlowService {
      * @author YellowTail
      * @since 2019-07-16
      */
-    private void genAndSetHashCode(SlowOpRecordDocument document) {
+    private String genSha1(SlowOpRecordDocument document) {
         //在哪个时间{ts} 谁{user} 对谁{ns} 进行了什么操作{op}， 花了多久{millis} 数据库放弃了多少次{numYield}
         
         Date createTime = document.getCreateTime();
@@ -255,8 +243,6 @@ public class Profile2SlowService {
         
         String combineStr = String.format("%s%s%s%s%d%d", dateStr, user, ns, op, document.getMillis(), document.getNumYield());
         
-        String sha1Hex = DigestUtils.sha1Hex(combineStr);
-        
-        document.setSha1(sha1Hex);
+        return DigestUtils.sha1Hex(combineStr);
     }
 }
