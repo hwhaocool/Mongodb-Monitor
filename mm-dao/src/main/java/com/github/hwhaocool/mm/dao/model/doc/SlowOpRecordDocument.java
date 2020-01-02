@@ -52,8 +52,6 @@ public class SlowOpRecordDocument {
     private String client;                  //客户端ip
     private String user;                    //帐号信息，fanggeek_frontend_trident
     
-    
-    
     /**
      * <br> ObjectId
      *
@@ -363,6 +361,31 @@ public class SlowOpRecordDocument {
     
     public void setUser(String user) {
         this.user = user;
+    }
+    
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((sha1 == null) ? 0 : sha1.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        SlowOpRecordDocument other = (SlowOpRecordDocument) obj;
+        if (sha1 == null) {
+            if (other.sha1 != null)
+                return false;
+        } else if (!sha1.equals(other.sha1))
+            return false;
+        return true;
     }
 
     @Override
