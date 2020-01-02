@@ -24,11 +24,11 @@ public class ReturnTooLong implements IAlarm {
     public boolean match(SlowOpRecordDocument doc) {
         this.doc = doc;
         
-        if (doc.getNreturned().intValue() >= thresholdService.getMaxReturnItem().intValue()) {
+        if (null != doc.getNreturned() && doc.getNreturned().intValue() >= thresholdService.getMaxReturnItem().intValue()) {
             return true;
         }
         
-        if (doc.getResponseLength().intValue() >= thresholdService.getMaxReturnLength().intValue()) {
+        if (null != doc.getResponseLength() &&  doc.getResponseLength().intValue() >= thresholdService.getMaxReturnLength().intValue()) {
             return true;
         }
         
