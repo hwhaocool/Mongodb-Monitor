@@ -36,7 +36,8 @@ public class ReturnTooLong implements IAlarm {
     }
 
     public String tips() {
-        return String.format("返回过长！ [条件] nreturned == %d, responseLength == %s", doc.getNreturned(),  RadixUtils.humanRead(doc.getResponseLength()));
+        System.out.println(doc.toString());
+        return String.format("返回过长！ [条件] nreturned == %d, responseLength == %s", doc.getNreturned(),  RadixUtils.humanRead(doc.getResponseLength().intValue()));
     }
 
 }
