@@ -46,4 +46,8 @@ public class IndexPart  implements IAlarm  {
         return "索引有点问题，查询语句没有完全走索引, [条件] docsExamined - keysExamined > 阈值, 帐号 = " + doc.getUser();
     }
 
+    public SlowOpRecordDocument getDoc() {
+        return doc;
+    }
+
 }

@@ -7,5 +7,7 @@ public interface IAlarm {
     public boolean match(SlowOpRecordDocument doc);
     
     public String tips();
+    
+    public SlowOpRecordDocument getDoc();
 
 }

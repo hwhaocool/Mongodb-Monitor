@@ -39,4 +39,8 @@ public class DocsSacnTooMuch  implements IAlarm  {
                 document.getDocsExamined() / 10000, document.getUser());
     }
 
+    public SlowOpRecordDocument getDoc() {
+        return document;
+    }
+
 }

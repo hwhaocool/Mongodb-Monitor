@@ -47,4 +47,8 @@ public class ReturnTooLong implements IAlarm {
                 doc.getNreturned(),  RadixUtils.humanRead(doc.getResponseLength().intValue()), doc.getUser());
     }
 
+    public SlowOpRecordDocument getDoc() {
+        return doc;
+    }
+
 }

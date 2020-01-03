@@ -23,11 +23,17 @@ public class IndexMiss implements IAlarm {
         //没有走索引
         return doc.getKeysExamined() == 0;
     }
+    
+    public SlowOpRecordDocument getDoc() {
+        return doc;
+    }
 
     public String tips() {
         LOGGER.info("IndexMiss {}", doc);
         
         return "天啦撸！ 没有加索引！, [条件] keysExamined == 0, 帐号 = " + doc.getUser();
     }
+
+    
 
 }

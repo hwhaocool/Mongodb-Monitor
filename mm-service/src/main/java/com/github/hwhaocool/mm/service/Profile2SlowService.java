@@ -3,7 +3,6 @@ package com.github.hwhaocool.mm.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -127,14 +126,16 @@ public class Profile2SlowService {
      * @since 2020-01-02
      */
     private List<MatchRuleTmp> getNeedAlarmList(List<SlowOpRecordDocument> list) {
-        List<IAlarm> checkerList = new ArrayList<>();
-        checkerList.add(new IndexMiss());
-        checkerList.add(new IndexPart(thresholdService));
-        checkerList.add(new DocsSacnTooMuch(thresholdService));
-        checkerList.add(new ReturnTooLong(thresholdService));
         
         return list.stream()
             .map(doc -> {
+                
+                List<IAlarm> checkerList = new ArrayList<>();
+                checkerList.add(new IndexMiss());
+                checkerList.add(new IndexPart(thresholdService));
+                checkerList.add(new DocsSacnTooMuch(thresholdService));
+                checkerList.add(new ReturnTooLong(thresholdService));
+                
                 // 如果匹配，返回 tmp 对象， 如果不匹配，返回null
                 return checkerList.stream()
                     .filter(k -> k.match(doc)  )
