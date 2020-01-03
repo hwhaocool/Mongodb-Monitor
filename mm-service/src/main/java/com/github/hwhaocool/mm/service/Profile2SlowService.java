@@ -3,6 +3,7 @@ package com.github.hwhaocool.mm.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -97,7 +98,15 @@ public class Profile2SlowService {
         saveSet.addAll(costList);
         
         //5. 保存
-        slowOpRecordDAO.saves(saveSet);
+        for (SlowOpRecordDocument saveDoc : saveSet) {
+            try {
+                slowOpRecordDAO.save(saveDoc);
+            } catch (Exception e) {
+                LOGGER.error("save error, {}", saveDoc);
+            }
+            
+        }
+//        slowOpRecordDAO.saves(saveSet);
         
         // 6. 告警
         genAndSendAlarm(alarmList);

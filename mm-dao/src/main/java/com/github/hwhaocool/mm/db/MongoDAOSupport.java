@@ -66,6 +66,10 @@ public abstract class MongoDAOSupport<T extends Object> {
         return getJongo().getCollection(collectionName());
     }
     
+    public void save(T t) {
+        getCollection().insert(t);
+    }
+    
     public void saves(Collection<T> ts) {
         getCollection().insert(ts.toArray());
     }
