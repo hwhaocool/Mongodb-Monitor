@@ -1,5 +1,8 @@
 package com.github.hwhaocool.mm.service.opalarm.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
 import com.github.hwhaocool.mm.service.opalarm.IAlarm;
 import com.github.hwhaocool.mm.service.threshold.ThresholdService;
@@ -11,6 +14,8 @@ import com.github.hwhaocool.mm.service.threshold.ThresholdService;
  * @since 2019-12-25
  */
 public class DocsSacnTooMuch  implements IAlarm  {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(DocsSacnTooMuch.class);
     
     private ThresholdService thresholdService;
     
@@ -28,6 +33,8 @@ public class DocsSacnTooMuch  implements IAlarm  {
     }
 
     public String tips() {
+        LOGGER.info("DocsSacnTooMuch {}", document);
+        
         return String.format("扫描文档数过多[%d 万]，代码or产品设计有问题, [条件]docsExamined 大于阈值, 帐号 = %s", 
                 document.getDocsExamined() / 1000, document.getUser());
     }

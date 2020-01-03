@@ -1,5 +1,8 @@
 package com.github.hwhaocool.mm.service.opalarm.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
 import com.github.hwhaocool.mm.service.opalarm.IAlarm;
 import com.github.hwhaocool.mm.service.threshold.ThresholdService;
@@ -11,6 +14,8 @@ import com.github.hwhaocool.mm.service.threshold.ThresholdService;
  * @since 2019-12-25
  */
 public class IndexPart  implements IAlarm  {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(IndexPart.class);
     
     private ThresholdService thresholdService;
     
@@ -36,6 +41,8 @@ public class IndexPart  implements IAlarm  {
     }
 
     public String tips() {
+        LOGGER.info("IndexPart {}", doc);
+        
         return "索引有点问题，查询语句没有完全走索引, [条件] docsExamined - keysExamined > 阈值, 帐号 = " + doc.getUser();
     }
 

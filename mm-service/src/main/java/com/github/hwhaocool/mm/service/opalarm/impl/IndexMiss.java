@@ -1,5 +1,8 @@
 package com.github.hwhaocool.mm.service.opalarm.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
 import com.github.hwhaocool.mm.service.opalarm.IAlarm;
 
@@ -11,6 +14,8 @@ import com.github.hwhaocool.mm.service.opalarm.IAlarm;
  */
 public class IndexMiss implements IAlarm {
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(IndexMiss.class);
+    
     private SlowOpRecordDocument doc;
 
     public boolean match(SlowOpRecordDocument doc) {
@@ -20,6 +25,8 @@ public class IndexMiss implements IAlarm {
     }
 
     public String tips() {
+        LOGGER.info("IndexMiss {}", doc);
+        
         return "天啦撸！ 没有加索引！, [条件] keysExamined == 0, 帐号 = " + doc.getUser();
     }
 
