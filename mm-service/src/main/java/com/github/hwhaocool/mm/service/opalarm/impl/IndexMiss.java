@@ -10,14 +10,17 @@ import com.github.hwhaocool.mm.service.opalarm.IAlarm;
  * @since 2019-12-25
  */
 public class IndexMiss implements IAlarm {
+    
+    private SlowOpRecordDocument doc;
 
     public boolean match(SlowOpRecordDocument doc) {
+        this.doc = doc;
         //没有走索引
         return doc.getKeysExamined() == 0;
     }
 
     public String tips() {
-        return "天啦撸！ 没有加索引！, [条件] keysExamined == 0";
+        return "天啦撸！ 没有加索引！, [条件] keysExamined == 0, 帐号 = " + doc.getUser();
     }
 
 }

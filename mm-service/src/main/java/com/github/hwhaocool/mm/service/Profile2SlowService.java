@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -235,7 +236,7 @@ public class Profile2SlowService {
         
         Date createTime = document.getCreateTime();
         String user = document.getUser();
-        String ns = document.getNs();
+        String ns =  Optional.ofNullable(document.getNs()).orElse("null");
         String op = document.getOp();
         
         DateTime dateTime = new DateTime(createTime);

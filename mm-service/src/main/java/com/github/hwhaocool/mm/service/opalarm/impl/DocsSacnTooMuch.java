@@ -28,7 +28,8 @@ public class DocsSacnTooMuch  implements IAlarm  {
     }
 
     public String tips() {
-        return String.format("扫描文档数过多[%d 万]，代码or产品设计有问题, [条件]docsExamined 大于阈值", document.getDocsExamined() / 1000);
+        return String.format("扫描文档数过多[%d 万]，代码or产品设计有问题, [条件]docsExamined 大于阈值, 帐号 = %s", 
+                document.getDocsExamined() / 1000, document.getUser());
     }
 
 }

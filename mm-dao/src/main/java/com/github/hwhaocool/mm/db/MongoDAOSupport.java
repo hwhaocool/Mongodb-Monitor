@@ -27,7 +27,7 @@ public abstract class MongoDAOSupport<T extends Object> {
     /**
      * 查询时间 阈值，30秒
      */
-    public static final long QUERY_TIME_LIMIT = 30 * 1000;
+    private static final long QUERY_TIME_LIMIT = 50 * 1000;
 
     protected Class<T> entityClass;
 
@@ -131,8 +131,6 @@ public abstract class MongoDAOSupport<T extends Object> {
                 LOGGER.error("error cursorhasNext cost {} objectId {}", cost, objectId);
                 break;
             }
-            
-            LOGGER.info("normal cursor hasNext cost {} objectId {}", cost, objectId);
             
             T next = cursor.next();
             

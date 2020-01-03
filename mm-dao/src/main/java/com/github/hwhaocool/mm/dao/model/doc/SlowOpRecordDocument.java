@@ -113,7 +113,7 @@ public class SlowOpRecordDocument {
      * @since 2019-07-15
      */
     public String getNs() {
-        return ns;
+        return null == ns ? "null" : ns;
     }
     
     public void setNs(String ns) {
@@ -165,7 +165,7 @@ public class SlowOpRecordDocument {
      * @since 2019-07-15
      */
     public Integer getKeysExamined() {
-        return keysExamined;
+        return null == keysExamined ? 0 : keysExamined;
     }
     
     public void setKeysExamined(Integer keysExamined) {
@@ -180,7 +180,7 @@ public class SlowOpRecordDocument {
      * @since 2019-07-15
      */
     public Integer getDocsExamined() {
-        return docsExamined;
+        return null == docsExamined ? 0 : docsExamined;
     }
     
     public void setDocsExamined(Integer docsExamined) {
@@ -233,7 +233,7 @@ public class SlowOpRecordDocument {
      * @since 2019-07-15
      */
     public Integer getNreturned() {
-        return nreturned;
+        return null == nreturned ? 0 : nreturned;
     }
     
     public void setNreturned(Integer nreturned) {
@@ -248,7 +248,7 @@ public class SlowOpRecordDocument {
      * @since 2019-07-15
      */
     public Integer getResponseLength() {
-        return responseLength;
+        return null == responseLength ? 0 : responseLength;
     }
     
     public void setResponseLength(Integer responseLength) {
