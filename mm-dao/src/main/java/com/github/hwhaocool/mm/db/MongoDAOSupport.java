@@ -6,8 +6,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
-import javax.annotation.PostConstruct;
-
 import org.bson.types.ObjectId;
 import org.jongo.Aggregate.ResultsIterator;
 import org.jongo.Find;
@@ -44,11 +42,6 @@ public abstract class MongoDAOSupport<T extends Object> {
     
     public abstract void createIndexs();
     
-    @PostConstruct
-    final public void initIndexs() {
-        this.createIndexs();
-    }
-    
     protected void createIndex(String field, IndexType indexType) {
         if (IndexType.UNIQUE.equals(indexType)) {
             createUniqueIndex(Index.of(field, IndexType.ASCENDING));
@@ -72,21 +65,9 @@ public abstract class MongoDAOSupport<T extends Object> {
     protected MongoCollection getCollection() {
         return getJongo().getCollection(collectionName());
     }
-
-    protected MongoCollection getCollection(String collectionName) {
-        return getJongo().getCollection(collectionName);
-    }
-    
-    public void save(T t) {
-        getCollection().save(t);
-    }
     
     public void saves(Collection<T> ts) {
         getCollection().insert(ts.toArray());
-    }
-
-    public T getById(Object id) {
-        return getCollection().findOne(new ObjectId((String) id)).as(entityClass);
     }
 
     public T getById(String id) {
@@ -100,25 +81,6 @@ public abstract class MongoDAOSupport<T extends Object> {
         return getCollection().findOne(new ObjectId(id)).as(entityClass);
     }
     
-    protected T get(String query, Object... parameters) {
-        return getCollection().findOne(query, parameters).as(entityClass);
-    }
-    
-    protected T getOne(String query, String sort, Object... parameters) {
-        MongoCursor<T> results = getCollection().find(query, parameters).sort(sort).limit(1).as(entityClass);
-        if(results.hasNext()){
-            return results.next();
-        }
-        return null;
-    }
-    
-    public T getOne(String query) {
-        return getCollection().findOne(query).as(entityClass);
-    }
-    
-    public T findOne() {
-        return getCollection().findOne().as(entityClass);
-    }
 
     /**
      * <br>得到数量
@@ -133,67 +95,9 @@ public abstract class MongoDAOSupport<T extends Object> {
         return getCollection().count(query, parameters);
     }
     
-    /**
-     * <br>得到数量
-     *
-     * @param query 查询语句
-     * @return
-     * @author YellowTail
-     * @since 2019-01-26
-     */
-    public long countByQuery(String query) {
-        return getCollection().count(query);
-    }
-    
-    /**
-     * <br> 是否存在主键
-     *
-     * @param id
-     * @return
-     * @author YellowTail
-     * @since 2019-03-02
-     */
-    public boolean existObjectId(String id) {
-        long countByQuery = countByQuery("{_id: #}", new ObjectId(id));
-        if (0L != countByQuery) {
-            return true;
-        }
-        
-        return false;
-    }
-
-    public List<T> getListWithDocument(String query) {
-        return toList((MongoCursor<T>) getCollection().find(query).as(entityClass));
-    }
-    
-    /**
-     * <br> 查询列表
-     *
-     * @param query 查询字符串
-     * @param parameters query的参数
-     * @return
-     * @author YellowTail
-     * @since 2019-01-26
-     */
-    public List<T> getListWithDocument(String query, Object... parameters) {
-        return toList((MongoCursor<T>) getCollection().find(query, parameters).as(entityClass));
-    }
-    
     public List<T> getListWithDocument(String query, Object queryParameters, String projection) {
         return toList((MongoCursor<T>) getCollection().find(query, queryParameters)
                 .projection(projection)
-                .as(entityClass));
-    }
-    
-    public List<T> getListWithDocument(String query, String sort, int limit) {
-        return toList((MongoCursor<T>) getCollection().find(query).sort(sort).skip(0).limit(limit).as(entityClass));
-    }
-    
-    protected List<T> getList(String query, String projection, String sort, int limit) {
-        return toList((MongoCursor<T>) getCollection()
-                .find(query).projection(projection)
-                .sort(sort)
-                .limit(limit)
                 .as(entityClass));
     }
     
@@ -207,28 +111,6 @@ public abstract class MongoDAOSupport<T extends Object> {
         
         return list;
     }
-    
-    @SuppressWarnings("unchecked")
-    protected List<T> getListWithClass(String query, String sort, int limit, Class<? extends T> targetClass) {
-        return toList((MongoCursor<T>) getCollection().find(query).sort(sort).skip(0).limit(limit).as(targetClass));
-    }
-
-    
-    /**
-     * <br>物理删除
-     * <br>软删除请使用 delete
-     *
-     * @param id
-     * @author YellowTail
-     * @since 2018-11-15
-     */
-    public void remove(String id) {
-        getCollection().remove(new ObjectId(id));
-    }
-
-    public void remove(String query, Object... parameters) {
-        getCollection().remove(query, parameters);
-    }
 
     public static <T> List<T> toList(MongoCursor<T> cursor){
         List<T> datas = new ArrayList<>();
@@ -240,8 +122,6 @@ public abstract class MongoDAOSupport<T extends Object> {
         long start = System.currentTimeMillis();
         
         ObjectId objectId = new ObjectId();
-        
-        LOGGER.info("start to hasNext, {}", objectId);
         
         //第一次执行  cursor.hasNext()  时，很慢，需要1秒，后续就比较快
         while (cursor.hasNext()) {
@@ -266,10 +146,6 @@ public abstract class MongoDAOSupport<T extends Object> {
         }
         
         return datas;
-    }
-    
-    protected <T> List<T> toList(ResultsIterator<T> cursor){
-        return toList(cursor, t->t);
     }
     
     protected <T, R> List<R> toList(ResultsIterator<T> cursor, Function<T, R> transfer){

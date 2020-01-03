@@ -1,5 +1,8 @@
 package com.github.hwhaocool.mm.service.opalarm.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.hwhaocool.mm.common.utils.RadixUtils;
 import com.github.hwhaocool.mm.dao.model.doc.SlowOpRecordDocument;
 import com.github.hwhaocool.mm.service.opalarm.IAlarm;
@@ -12,6 +15,8 @@ import com.github.hwhaocool.mm.service.threshold.ThresholdService;
  * @since 2020-01-02
  */
 public class ReturnTooLong implements IAlarm {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReturnTooLong.class);
     
     private SlowOpRecordDocument doc;
     
@@ -36,7 +41,8 @@ public class ReturnTooLong implements IAlarm {
     }
 
     public String tips() {
-        System.out.println(doc.toString());
+        LOGGER.info("ReturnTooLong {}", doc);
+        
         return String.format("返回过长！ [条件] nreturned == %d, responseLength == %s", doc.getNreturned(),  RadixUtils.humanRead(doc.getResponseLength().intValue()));
     }
 
