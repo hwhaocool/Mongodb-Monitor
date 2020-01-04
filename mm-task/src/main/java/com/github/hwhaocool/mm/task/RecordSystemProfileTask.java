@@ -16,7 +16,7 @@ public class RecordSystemProfileTask {
     @Autowired
     private Profile2SlowService profile2SlowService;
     
-//    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void recordTask() {
         
         LOGGER.info("RecordSystemProfileTask recordTask start");
