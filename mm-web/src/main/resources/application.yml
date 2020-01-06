@@ -15,8 +15,10 @@ common:
 threshold:
    # 最大文档扫描数
    max-docs: ${max-docs:100000}
+   
    # 查询耗时阈值
    min-cost: ${min-cost:2000}
+   
    # docsExamined 和 keysExamined 差距多大就认为有问题
    key-docs-scan-gap: ${key-docs-scan-gap:1000}
    
