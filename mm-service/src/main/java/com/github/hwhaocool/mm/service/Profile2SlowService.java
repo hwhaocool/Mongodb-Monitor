@@ -131,7 +131,7 @@ public class Profile2SlowService {
             .map(doc -> {
                 
                 List<IAlarm> checkerList = new ArrayList<>();
-                checkerList.add(new IndexMiss());
+                checkerList.add(new IndexMiss(thresholdService));
                 checkerList.add(new IndexPart(thresholdService));
                 checkerList.add(new DocsSacnTooMuch(thresholdService));
                 checkerList.add(new ReturnTooLong(thresholdService));
