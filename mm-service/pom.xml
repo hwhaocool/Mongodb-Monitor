@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>mongo-monitor-pom</artifactId>
+        <groupId>com.github.hwhaocool.mm</groupId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>mm-service</artifactId>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <!-- 依赖 mm-common 模块 -->
+        <dependency>
+            <groupId>com.github.hwhaocool.mm</groupId>
+            <artifactId>mm-common</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!-- 依赖 mm-dao 模块-->
+        <dependency>
+            <groupId>com.github.hwhaocool.mm</groupId>
+            <artifactId>mm-dao</artifactId>
+            <version>1.0</version>
+        </dependency>
+        
+        <dependency>
+             <groupId>org.springframework</groupId>
+             <artifactId>spring-webflux</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>io.projectreactor.netty</groupId>
+            <artifactId>reactor-netty</artifactId>
+        </dependency>
+        
+    </dependencies>
+
+
+</project>

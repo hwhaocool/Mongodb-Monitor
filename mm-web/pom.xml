@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.github.hwhaocool.mm</groupId>
+        <artifactId>mongo-monitor-pom</artifactId>
+        <version>1.0</version>
+        
+    </parent>
+
+    <artifactId>mm-web</artifactId>
+    <name>mm-web</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- 依赖 mm-common 模块-->
+        <dependency>
+            <groupId>com.github.hwhaocool.mm</groupId>
+            <artifactId>mm-common</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!-- 依赖 mm-service 模块-->
+        <dependency>
+            <groupId>com.github.hwhaocool.mm</groupId>
+            <artifactId>mm-service</artifactId>
+            <version>1.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.github.hwhaocool.mm</groupId>
+            <artifactId>mm-task</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>
