@@ -1,0 +1,44 @@
+    
+server:
+  port: 8080
+  
+common:
+   #当前环境名称
+   env-name: ${env-name:test}
+   
+   # 机器人key
+   robot-key: ${robot-key}
+   #详情跳转链接的域名, 如 http://localhost https://xx.xx
+   details-host: ${details-host:localhost}
+   
+# 阈值
+threshold:
+   # 最大文档扫描数
+   max-docs: ${max-docs:100000}
+   
+   # 查询耗时阈值
+   min-cost: ${min-cost:2000}
+   
+   # docsExamined 和 keysExamined 差距多大就认为有问题
+   key-docs-scan-gap: ${key-docs-scan-gap:1000}
+   
+   # 最多查询多少条数据
+   max-return-item: ${max-return-item:50}
+   
+   # 最多查询多长（也许单个就比较长，单位：字节）
+   max-return-length: ${max-return-length:100000}
+   
+    
+# monitor 表示要监控的数据库， 这里的配置需要自行修改
+monitor-major-mongodb:
+  # 比如： mongodb://name:passwd@db-major-primary:3717,db-major-secondary:3717/db
+  client-uri: ${major-db-uri}
+  database:  ${major-db}
+  connections-per-host: 50
+
+
+# save 表示数据要保存到的数据库
+save-mongodb:
+  client-uri: ${save-db-uri}
+  database: ${save-db}
+  connections-per-host: 50
