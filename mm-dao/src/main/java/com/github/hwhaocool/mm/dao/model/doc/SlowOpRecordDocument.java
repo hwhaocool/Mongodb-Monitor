@@ -22,8 +22,8 @@ public class SlowOpRecordDocument {
     private Date createTime;                //发生时间
 
     private String op;                      //操作类型，query
-    private String db;                      //库名，fanggeek
-    private String ns;                      //表名，fanggeek.odin_checkins
+    private String db;                      //库名，xx
+    private String ns;                      //表名，xx.odin_checkins
     
     private Object query;                   //查询语句,op=query
     private Object command;                 //查询语句, op=command
